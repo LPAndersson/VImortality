@@ -13,14 +13,10 @@ Implementation of [''Forecasting mortality using variational inference''](https:
 
 To install Pyro, you can refer to https://pyro.ai
 
-## Usage
-
-The following example usage shows how to train and forecast the mortality model used in this work.
-
-### Training
+## Training
 
 The script train.py trains models in parallell for the parameters specified in the file. The fitted model is saved in the folder fittedModels. 
 
-### Forecast
+## Forecast
 
 The Jupyter notebook forecast.ipynb loads the trained model and produces the figures and results in the article.
