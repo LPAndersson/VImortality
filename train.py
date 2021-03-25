@@ -1,11 +1,11 @@
-import multiprocessing
-
 from mortalityForecast import mortalityForecast as mf
 from mortalityForecast import mortality_data_loader as data_loader
 from mortalityForecast import utils
 
 import matplotlib.pyplot as plt
 import numpy as np
+
+import multiprocessing
 
 param_tuple = ({
     'country' : data_loader.USA,
@@ -111,10 +111,9 @@ def train(param):
 
     model = mf.Mortality(param, cuda = False)
 
-    file_name = "models/%s_%d_%d_%d_%d_%s_%d_%d_%d" %(param['country'].name, param['first_year_train'], param['last_year_train'],param['first_year_test'], param['last_year_test'], param['sex'], param['max_age'], param['nn_layers'], param['latent_dim'])
+    file_name = "models/%s_%d_%d_%d_%d_%s_%d_%d_%d" %(param['country'].name, param['first_year_train'], param['last_year_train'], param['sex'], param['max_age'], param['nn_layers'], param['latent_dim'])
 
     model = model.fit(exposure = exposure_train, deaths = deaths_train, num_steps = 10000, log_freq = 10, checkpoint_freq = 100, save_file = file_name)
-
 
 
 if __name__ == '__main__':

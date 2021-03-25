@@ -7,42 +7,20 @@ Implementation of [''Forecasting mortality using variational inference''](https:
 * NumPy
 * SciPy
 * PyTorch
-* pyro
-* pandas
+* Pyro
+* Pandas
 
 
-To install TensorFlow, you can refer to https://pyro.ai
+To install Pyro, you can refer to https://pyro.ai
 
 ## Usage
 
-The following example usage shows how to train and test a TPA-LSTM model on MuseData with settings used in this work.
+The following example usage shows how to train and forecast the mortality model used in this work.
 
 ### Training
 
-```
-$ python main.py --mode train \
-    --attention_len 16 \
-    --batch_size 32 \
-    --data_set muse \
-    --dropout 0.2 \
-    --learning_rate 1e-5 \
-    --model_dir ./models/model \
-    --num_epochs 40 \
-    --num_layers 3 \
-    --num_units 338
-```
+The script train.py trains models in parallell for the parameters specified in the file. The fitted model is saved in the folder fittedModels. 
 
-### Testing
+### Forecast
 
-```
-$ python main.py --mode test \
-    --attention_len 16 \
-    --batch_size 32 \
-    --data_set muse \
-    --dropout 0.2 \
-    --learning_rate 1e-5 \
-    --model_dir ./models/model \
-    --num_epochs 40 \
-    --num_layers 3 \
-    --num_units 338
-```
+The Jupyter notebook forecast.ipynb loads the trained model and produces the figures and results in the article.
