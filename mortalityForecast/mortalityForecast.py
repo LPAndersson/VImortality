@@ -44,7 +44,7 @@ class Emitter(nn.Module):
         elif nn_layers == 2:
             self.decoder = nn.Sequential(
                 nn.Linear(latent_dim, nn_dim),
-                nn.Sigmoid(),
+                nn.Tanh(),
                 nn.Linear(nn_dim, input_dim))
         elif nn_layers == 1:
             self.decoder = nn.Sequential(
@@ -515,7 +515,7 @@ class Mortality:
     #             level_scale_forecast.detach().numpy(),
     #             p_list )
 
-    def forecast_mortality_rate(self, age, forecast_length = 20, mc_samples = 100):
+    def forecast_mortality_rate(self, age, forecast_length, mc_samples = 1000):
 
         exposure = self.data[1]
 
@@ -535,7 +535,7 @@ class Mortality:
         return (mean_mortality_rate, std_mortality_rate)
 
 
-    def forecast_factors(self, forecast_length = 20):
+    def forecast_factors(self, forecast_length):
 
         #Distribution of last time in training set
         level_loc = self.level_loc[:,-1]
