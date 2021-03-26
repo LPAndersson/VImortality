@@ -26,7 +26,7 @@ from mortalityForecast import utils
 class Emitter(nn.Module):
     #Parameterizes `p(x_t | z_t)`
 
-    def __init__(self, input_dim, latent_dim = 3, nn_dim = 100, nn_layers = 2):
+    def __init__(self, input_dim, latent_dim = 3, nn_dim = 32, nn_layers = 2):
         super(Emitter, self).__init__()
 
         self.input_dim = input_dim

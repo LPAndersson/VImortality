@@ -15,7 +15,7 @@ param_tuple = ({
     'last_year_test' : 2016,
     'sex' : "Male", # or Female, Both
     'max_age' : 100,
-    'nn_layers' : 1,
+    'nn_layers' : 2,
     'latent_dim' : 1
 },)
 
@@ -27,7 +27,7 @@ param_tuple = param_tuple + ({
     'last_year_test' : 2016,
     'sex' : "Male", # or Female, Both
     'max_age' : 100,
-    'nn_layers' : 1,
+    'nn_layers' : 2,
     'latent_dim' : 2
 },)
 
@@ -39,7 +39,7 @@ param_tuple = param_tuple + ({
     'last_year_test' : 2016,
     'sex' : "Male", # or Female, Both
     'max_age' : 100,
-    'nn_layers' : 1,
+    'nn_layers' : 2,
     'latent_dim' : 3
 },)
 
@@ -51,7 +51,7 @@ param_tuple = param_tuple + ({
     'last_year_test' : 2016,
     'sex' : "Male", # or Female, Both
     'max_age' : 100,
-    'nn_layers' : 1,
+    'nn_layers' : 2,
     'latent_dim' :4
 },)
 
@@ -63,7 +63,7 @@ param_tuple = param_tuple + ({
     'last_year_test' : 2016,
     'sex' : "Male", # or Female, Both
     'max_age' : 100,
-    'nn_layers' : 1,
+    'nn_layers' : 2,
     'latent_dim' :5
 },)
 
@@ -75,7 +75,7 @@ param_tuple = param_tuple + ({
     'last_year_test' : 2016,
     'sex' : "Male", # or Female, Both
     'max_age' : 100,
-    'nn_layers' : 1,
+    'nn_layers' : 2,
     'latent_dim' :6
 },)
 
@@ -87,7 +87,7 @@ param_tuple = param_tuple + ({
     'last_year_test' : 2016,
     'sex' : "Female", # or Female, Both
     'max_age' : 100,
-    'nn_layers' : 1,
+    'nn_layers' : 2,
     'latent_dim' :3
 },)
 
@@ -99,7 +99,7 @@ param_tuple = param_tuple + ({
     'last_year_test' : 2016,
     'sex' : "Both", # or Female, Both
     'max_age' : 100,
-    'nn_layers' : 1,
+    'nn_layers' : 2,
     'latent_dim' :3
 },)
 
