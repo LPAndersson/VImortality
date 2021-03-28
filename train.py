@@ -8,8 +8,8 @@ import numpy as np
 import multiprocessing
 
 param_tuple = ({
-    'country' : data_loader.USA,
-    'first_year_train' : 1933,
+    'country' : data_loader.SWEDEN,
+    'first_year_train' : 1920,
     'last_year_train' : 2000,
     'first_year_test' : 2001,
     'last_year_test' : 2016,
@@ -20,8 +20,8 @@ param_tuple = ({
 },)
 
 param_tuple = param_tuple + ({
-    'country' : data_loader.USA,
-    'first_year_train' : 1933,
+    'country' : data_loader.SWEDEN,
+    'first_year_train' : 1920,
     'last_year_train' : 2000,
     'first_year_test' : 2001,
     'last_year_test' : 2016,
@@ -32,8 +32,8 @@ param_tuple = param_tuple + ({
 },)
 
 param_tuple = param_tuple + ({
-    'country' : data_loader.USA,
-    'first_year_train' : 1933,
+    'country' : data_loader.SWEDEN,
+    'first_year_train' : 1920,
     'last_year_train' : 2000,
     'first_year_test' : 2001,
     'last_year_test' : 2016,
@@ -44,8 +44,8 @@ param_tuple = param_tuple + ({
 },)
 
 param_tuple = param_tuple + ({
-    'country' : data_loader.USA,
-    'first_year_train' : 1933,
+    'country' : data_loader.SWEDEN,
+    'first_year_train' : 1920,
     'last_year_train' : 2000,
     'first_year_test' : 2001,
     'last_year_test' : 2016,
@@ -56,8 +56,8 @@ param_tuple = param_tuple + ({
 },)
 
 param_tuple = param_tuple + ({
-    'country' : data_loader.USA,
-    'first_year_train' : 1933,
+    'country' : data_loader.SWEDEN,
+    'first_year_train' : 1920,
     'last_year_train' : 2000,
     'first_year_test' : 2001,
     'last_year_test' : 2016,
@@ -68,8 +68,8 @@ param_tuple = param_tuple + ({
 },)
 
 param_tuple = param_tuple + ({
-    'country' : data_loader.USA,
-    'first_year_train' : 1933,
+    'country' : data_loader.SWEDEN,
+    'first_year_train' : 1920,
     'last_year_train' : 2000,
     'first_year_test' : 2001,
     'last_year_test' : 2016,
@@ -80,8 +80,8 @@ param_tuple = param_tuple + ({
 },)
 
 param_tuple = param_tuple + ({
-    'country' : data_loader.USA,
-    'first_year_train' : 1933,
+    'country' : data_loader.SWEDEN,
+    'first_year_train' : 1920,
     'last_year_train' : 2000,
     'first_year_test' : 2001,
     'last_year_test' : 2016,
@@ -92,8 +92,32 @@ param_tuple = param_tuple + ({
 },)
 
 param_tuple = param_tuple + ({
-    'country' : data_loader.USA,
-    'first_year_train' : 1933,
+    'country' : data_loader.SWEDEN,
+    'first_year_train' : 1920,
+    'last_year_train' : 2000,
+    'first_year_test' : 2001,
+    'last_year_test' : 2016,
+    'sex' : "Female", # or Female, Both
+    'max_age' : 100,
+    'nn_layers' : 2,
+    'latent_dim' :4
+},)
+
+param_tuple = param_tuple + ({
+    'country' : data_loader.SWEDEN,
+    'first_year_train' : 1920,
+    'last_year_train' : 2000,
+    'first_year_test' : 2001,
+    'last_year_test' : 2016,
+    'sex' : "Female", # or Female, Both
+    'max_age' : 100,
+    'nn_layers' : 2,
+    'latent_dim' :5
+},)
+
+param_tuple = param_tuple + ({
+    'country' : data_loader.SWEDEN,
+    'first_year_train' : 1920,
     'last_year_train' : 2000,
     'first_year_test' : 2001,
     'last_year_test' : 2016,
@@ -109,10 +133,22 @@ param_tuple = param_tuple + ({
     'last_year_train' : 2000,
     'first_year_test' : 2001,
     'last_year_test' : 2016,
-    'sex' : "Male", # or Female, Both
+    'sex' : "Both", # or Female, Both
     'max_age' : 100,
-    'nn_layers' : 1,
-    'latent_dim' :6
+    'nn_layers' : 2,
+    'latent_dim' :4
+},)
+
+param_tuple = param_tuple + ({
+    'country' : data_loader.SWEDEN,
+    'first_year_train' : 1920,
+    'last_year_train' : 2000,
+    'first_year_test' : 2001,
+    'last_year_test' : 2016,
+    'sex' : "Both", # or Female, Both
+    'max_age' : 100,
+    'nn_layers' : 2,
+    'latent_dim' :5
 },)
 
 def train(param):
