@@ -216,6 +216,7 @@ class Mortality:
         self.num_test_years = param['last_year_test'] - param['first_year_test'] + 1
 
         self.weight_decay = param['weight_decay']
+        self.lr = param['lr']
 
         self.cuda = cuda
 
@@ -242,10 +243,10 @@ class Mortality:
 
         if (self.weight_decay):
             adam_params = {"weight_decay": 2.0,
-                            "lr" : 1e-2}
+                            "lr" : self.lr}
         else:
             adam_params = {"weight_decay": 0.0,
-                            "lr" : 1e-2}
+                            "lr" : self.lr}
         self.optimizer = ClippedAdam(adam_params)
 
         if load_file is not None:

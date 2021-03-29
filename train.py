@@ -16,8 +16,9 @@ param_tuple = ({
     'sex' : "Male", # or Female, Both
     'max_age' : 100,
     'nn_layers' : 1,
-    'latent_dim' : 1,
-    'weight_decay' : True
+    'latent_dim' : 4,
+    'weight_decay' : 0.0
+    'lr' : 1e-1
 },)
 
 param_tuple = param_tuple + ({
@@ -29,8 +30,9 @@ param_tuple = param_tuple + ({
     'sex' : "Male", # or Female, Both
     'max_age' : 100,
     'nn_layers' : 1,
-    'latent_dim' : 2,
-    'weight_decay' : True
+    'latent_dim' : 4,
+    'weight_decay' : 0.0
+    'lr' : 1e-2
 },)
 
 param_tuple = param_tuple + ({
@@ -42,8 +44,9 @@ param_tuple = param_tuple + ({
     'sex' : "Male", # or Female, Both
     'max_age' : 100,
     'nn_layers' : 1,
-    'latent_dim' : 3,
-    'weight_decay' : True
+    'latent_dim' : 4,
+    'weight_decay' : 0.0
+    'lr' : 1e-3
 },)
 
 param_tuple = param_tuple + ({
@@ -55,8 +58,9 @@ param_tuple = param_tuple + ({
     'sex' : "Male", # or Female, Both
     'max_age' : 100,
     'nn_layers' : 1,
-    'latent_dim' :4,
-    'weight_decay' : True
+    'latent_dim' : 4,
+    'weight_decay' : 1.0
+    'lr' : 1e-1
 },)
 
 param_tuple = param_tuple + ({
@@ -68,8 +72,9 @@ param_tuple = param_tuple + ({
     'sex' : "Male", # or Female, Both
     'max_age' : 100,
     'nn_layers' : 1,
-    'latent_dim' :5,
-    'weight_decay' : True
+    'latent_dim' : 4,
+    'weight_decay' : 1.0
+    'lr' : 1e-2
 },)
 
 param_tuple = param_tuple + ({
@@ -81,8 +86,9 @@ param_tuple = param_tuple + ({
     'sex' : "Male", # or Female, Both
     'max_age' : 100,
     'nn_layers' : 1,
-    'latent_dim' :6,
-    'weight_decay' : True
+    'latent_dim' : 4,
+    'weight_decay' : 1.0
+    'lr' : 1e-3
 },)
 
 param_tuple = param_tuple + ({
@@ -94,8 +100,9 @@ param_tuple = param_tuple + ({
     'sex' : "Male", # or Female, Both
     'max_age' : 100,
     'nn_layers' : 1,
-    'latent_dim' :7,
-    'weight_decay' : True
+    'latent_dim' : 4,
+    'weight_decay' : 2.0
+    'lr' : 1e-1
 },)
 
 param_tuple = param_tuple + ({
@@ -107,8 +114,9 @@ param_tuple = param_tuple + ({
     'sex' : "Male", # or Female, Both
     'max_age' : 100,
     'nn_layers' : 1,
-    'latent_dim' :1,
-    'weight_decay' : False
+    'latent_dim' : 4,
+    'weight_decay' : 2.0
+    'lr' : 1e-2
 },)
 
 param_tuple = param_tuple + ({
@@ -120,76 +128,10 @@ param_tuple = param_tuple + ({
     'sex' : "Male", # or Female, Both
     'max_age' : 100,
     'nn_layers' : 1,
-    'latent_dim' : 2,
-    'weight_decay' : False
+    'latent_dim' : 4,
+    'weight_decay' : 2.0
+    'lr' : 1e-3
 },)
-
-param_tuple = param_tuple + ({
-    'country' : data_loader.SWEDEN,
-    'first_year_train' : 1920,
-    'last_year_train' : 2000,
-    'first_year_test' : 2001,
-    'last_year_test' : 2019,
-    'sex' : "Male", # or Female, Both
-    'max_age' : 100,
-    'nn_layers' : 1,
-    'latent_dim' : 3,
-    'weight_decay' : False
-},)
-
-param_tuple = param_tuple + ({
-    'country' : data_loader.SWEDEN,
-    'first_year_train' : 1920,
-    'last_year_train' : 2000,
-    'first_year_test' : 2001,
-    'last_year_test' : 2019,
-    'sex' : "Male", # or Female, Both
-    'max_age' : 100,
-    'nn_layers' : 1,
-    'latent_dim' :4,
-    'weight_decay' : False
-},)
-
-param_tuple = param_tuple + ({
-    'country' : data_loader.SWEDEN,
-    'first_year_train' : 1920,
-    'last_year_train' : 2000,
-    'first_year_test' : 2001,
-    'last_year_test' : 2019,
-    'sex' : "Male", # or Female, Both
-    'max_age' : 100,
-    'nn_layers' : 1,
-    'latent_dim' :5,
-    'weight_decay' : False
-},)
-
-param_tuple = param_tuple + ({
-    'country' : data_loader.SWEDEN,
-    'first_year_train' : 1920,
-    'last_year_train' : 2000,
-    'first_year_test' : 2001,
-    'last_year_test' : 2019,
-    'sex' : "Male", # or Female, Both
-    'max_age' : 100,
-    'nn_layers' : 1,
-    'latent_dim' :6,
-    'weight_decay' : False
-},)
-
-param_tuple = param_tuple + ({
-    'country' : data_loader.SWEDEN,
-    'first_year_train' : 1920,
-    'last_year_train' : 2000,
-    'first_year_test' : 2001,
-    'last_year_test' : 2019,
-    'sex' : "Male", # or Female, Both
-    'max_age' : 100,
-    'nn_layers' : 1,
-    'latent_dim' :7,
-    'weight_decay' : False
-},)
-
-
 
 def train(param):
 
@@ -199,7 +141,7 @@ def train(param):
 
     model = mf.Mortality(param, cuda = False)
 
-    file_name = "trainedModels/%s_%d_%d_%s_%d_%d_%d" %(param['country'].name, param['first_year_train'], param['last_year_train'], param['sex'], param['max_age'], param['nn_layers'], param['latent_dim'])
+    file_name = "trainedModels/%s_%d_%d_%s_%d_%d_%d_%d_%d" %(param['country'].name, param['first_year_train'], param['last_year_train'], param['sex'], param['max_age'], param['nn_layers'], param['latent_dim'],param['weight_decay'], param['lr'])
 
     model = model.fit(exposure = exposure_train, deaths = deaths_train, num_steps = 10000, log_freq = 10, checkpoint_freq = 100, save_file = file_name)
 
