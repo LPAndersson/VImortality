@@ -215,6 +215,8 @@ class Mortality:
         self.num_train_years = param['last_year_train'] - param['first_year_train'] + 1
         self.num_test_years = param['last_year_test'] - param['first_year_test'] + 1
 
+        self.weight_decay = param['weight_decay']
+
         self.cuda = cuda
 
     def fit(self, exposure, deaths, num_steps = 1000, log_freq = 1, checkpoint_freq = 10, load_file = None, save_file = None):
@@ -238,9 +240,10 @@ class Mortality:
         #self.optimizer = RMSprop({"lr": 0.01})
         #self.optimizer = Adagrad({"lr": 0.1})
 
-        adam_params = {"lr": 0.0003, "betas": (0.96, 0.999),
-               "clip_norm": 10.0, "lrd": 0.99996,
-               "weight_decay": 2.0}
+        if (self.weight_decay):
+            adam_params = {"weight_decay": 2.0}
+        else:
+            adam_params = {"weight_decay": 0.0}
         self.optimizer = ClippedAdam(adam_params)
 
         if load_file is not None:
