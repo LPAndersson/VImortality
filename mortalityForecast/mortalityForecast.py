@@ -241,9 +241,11 @@ class Mortality:
         #self.optimizer = Adagrad({"lr": 0.1})
 
         if (self.weight_decay):
-            adam_params = {"weight_decay": 2.0}
+            adam_params = {"weight_decay": 2.0,
+                            "lr" : 1e-2}
         else:
-            adam_params = {"weight_decay": 0.0}
+            adam_params = {"weight_decay": 0.0,
+                            "lr" : 1e-2}
         self.optimizer = ClippedAdam(adam_params)
 
         if load_file is not None:
