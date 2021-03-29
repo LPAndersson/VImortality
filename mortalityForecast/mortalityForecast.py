@@ -44,7 +44,7 @@ class Emitter(nn.Module):
         elif nn_layers == 2:
             self.decoder = nn.Sequential(
                 nn.Linear(latent_dim, nn_dim),
-                nn.Tanh(),
+                nn.ReLU(),
                 nn.Linear(nn_dim, input_dim))
         elif nn_layers == 1:
             self.decoder = nn.Sequential(
@@ -235,8 +235,13 @@ class Mortality:
 
         self.dmm = _DMM(num_years = self.num_years, input_dim = self.num_ages, emitter = self.emitter, latent_transition  = self.latent_transition, use_cuda = self.cuda)
 
-        self.optimizer = RMSprop({"lr": 0.01})
+        #self.optimizer = RMSprop({"lr": 0.01})
         #self.optimizer = Adagrad({"lr": 0.1})
+
+        adam_params = {"lr": 0.0003, "betas": (0.96, 0.999),
+               "clip_norm": 10.0, "lrd": 0.99996,
+               "weight_decay": 2.0}
+        optimizer = ClippedAdam(adam_params)
 
         if load_file is not None:
             self.load_checkpoint(load_file)

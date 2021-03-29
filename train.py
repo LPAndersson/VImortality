@@ -12,7 +12,7 @@ param_tuple = ({
     'first_year_train' : 1920,
     'last_year_train' : 2000,
     'first_year_test' : 2001,
-    'last_year_test' : 2016,
+    'last_year_test' : 2019,
     'sex' : "Male", # or Female, Both
     'max_age' : 100,
     'nn_layers' : 2,
@@ -24,7 +24,7 @@ param_tuple = param_tuple + ({
     'first_year_train' : 1920,
     'last_year_train' : 2000,
     'first_year_test' : 2001,
-    'last_year_test' : 2016,
+    'last_year_test' : 2019,
     'sex' : "Male", # or Female, Both
     'max_age' : 100,
     'nn_layers' : 2,
@@ -36,7 +36,7 @@ param_tuple = param_tuple + ({
     'first_year_train' : 1920,
     'last_year_train' : 2000,
     'first_year_test' : 2001,
-    'last_year_test' : 2016,
+    'last_year_test' : 2019,
     'sex' : "Male", # or Female, Both
     'max_age' : 100,
     'nn_layers' : 2,
@@ -48,7 +48,7 @@ param_tuple = param_tuple + ({
     'first_year_train' : 1920,
     'last_year_train' : 2000,
     'first_year_test' : 2001,
-    'last_year_test' : 2016,
+    'last_year_test' : 2019,
     'sex' : "Male", # or Female, Both
     'max_age' : 100,
     'nn_layers' : 2,
@@ -60,7 +60,7 @@ param_tuple = param_tuple + ({
     'first_year_train' : 1920,
     'last_year_train' : 2000,
     'first_year_test' : 2001,
-    'last_year_test' : 2016,
+    'last_year_test' : 2019,
     'sex' : "Male", # or Female, Both
     'max_age' : 100,
     'nn_layers' : 2,
@@ -72,7 +72,7 @@ param_tuple = param_tuple + ({
     'first_year_train' : 1920,
     'last_year_train' : 2000,
     'first_year_test' : 2001,
-    'last_year_test' : 2016,
+    'last_year_test' : 2019,
     'sex' : "Male", # or Female, Both
     'max_age' : 100,
     'nn_layers' : 2,
@@ -84,71 +84,11 @@ param_tuple = param_tuple + ({
     'first_year_train' : 1920,
     'last_year_train' : 2000,
     'first_year_test' : 2001,
-    'last_year_test' : 2016,
-    'sex' : "Female", # or Female, Both
+    'last_year_test' : 2019,
+    'sex' : "Male", # or Female, Both
     'max_age' : 100,
-    'nn_layers' : 2,
-    'latent_dim' :3
-},)
-
-param_tuple = param_tuple + ({
-    'country' : data_loader.SWEDEN,
-    'first_year_train' : 1920,
-    'last_year_train' : 2000,
-    'first_year_test' : 2001,
-    'last_year_test' : 2016,
-    'sex' : "Female", # or Female, Both
-    'max_age' : 100,
-    'nn_layers' : 2,
-    'latent_dim' :4
-},)
-
-param_tuple = param_tuple + ({
-    'country' : data_loader.SWEDEN,
-    'first_year_train' : 1920,
-    'last_year_train' : 2000,
-    'first_year_test' : 2001,
-    'last_year_test' : 2016,
-    'sex' : "Female", # or Female, Both
-    'max_age' : 100,
-    'nn_layers' : 2,
-    'latent_dim' :5
-},)
-
-param_tuple = param_tuple + ({
-    'country' : data_loader.SWEDEN,
-    'first_year_train' : 1920,
-    'last_year_train' : 2000,
-    'first_year_test' : 2001,
-    'last_year_test' : 2016,
-    'sex' : "Both", # or Female, Both
-    'max_age' : 100,
-    'nn_layers' : 2,
-    'latent_dim' :3
-},)
-
-param_tuple = param_tuple + ({
-    'country' : data_loader.SWEDEN,
-    'first_year_train' : 1920,
-    'last_year_train' : 2000,
-    'first_year_test' : 2001,
-    'last_year_test' : 2016,
-    'sex' : "Both", # or Female, Both
-    'max_age' : 100,
-    'nn_layers' : 2,
-    'latent_dim' :4
-},)
-
-param_tuple = param_tuple + ({
-    'country' : data_loader.SWEDEN,
-    'first_year_train' : 1920,
-    'last_year_train' : 2000,
-    'first_year_test' : 2001,
-    'last_year_test' : 2016,
-    'sex' : "Both", # or Female, Both
-    'max_age' : 100,
-    'nn_layers' : 2,
-    'latent_dim' :5
+    'nn_layers' : 1,
+    'latent_dim' :1
 },)
 
 def train(param):
