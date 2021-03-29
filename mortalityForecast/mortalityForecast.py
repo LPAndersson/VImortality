@@ -241,7 +241,7 @@ class Mortality:
         adam_params = {"lr": 0.0003, "betas": (0.96, 0.999),
                "clip_norm": 10.0, "lrd": 0.99996,
                "weight_decay": 2.0}
-        optimizer = ClippedAdam(adam_params)
+        self.optimizer = ClippedAdam(adam_params)
 
         if load_file is not None:
             self.load_checkpoint(load_file)
