@@ -19,7 +19,6 @@ import pyro.poutine as poutine
 from pyro.distributions.transforms import affine_autoregressive
 from pyro.infer import SVI, JitTrace_ELBO, Trace_ELBO, TraceEnum_ELBO, TraceTMC_ELBO, config_enumerate
 from pyro.optim import ClippedAdam
-from pyro.optim import RMSprop
 
 from mortalityForecast import utils
 
@@ -215,9 +214,6 @@ class Mortality:
         self.num_train_years = param['last_year_train'] - param['first_year_train'] + 1
         self.num_test_years = param['last_year_test'] - param['first_year_test'] + 1
 
-        self.weight_decay = param['weight_decay']
-        self.lr = param['lr']
-
         self.cuda = cuda
 
     def fit(self, exposure, deaths, num_steps = 1000, log_freq = 1, checkpoint_freq = 10, load_file = None, save_file = None):
@@ -241,12 +237,16 @@ class Mortality:
         #self.optimizer = RMSprop({"lr": 0.01})
         #self.optimizer = Adagrad({"lr": 0.1})
 
-        if (self.weight_decay):
-            adam_params = {"weight_decay": 2.0,
-                            "lr" : self.lr}
-        else:
-            adam_params = {"weight_decay": 0.0,
-                            "lr" : self.lr}
+        # if (self.weight_decay):
+        #     adam_params = {"weight_decay": 2.0,
+        #                     "lr" : self.lr}
+        # else:
+        #     adam_params = {"weight_decay": 0.0,
+        #                     "lr" : self.lr}
+
+        adam_params = {"weight_decay": 0.0,
+                             "lr" : 1e-3}
+
         self.optimizer = ClippedAdam(adam_params)
 
         if load_file is not None:
@@ -295,8 +295,11 @@ class Mortality:
 
         self.dmm = _DMM(num_years = self.num_years, input_dim = self.num_ages, emitter = self.emitter, latent_transition  = self.latent_transition)
 
-        self.optimizer = RMSprop({"lr": 0.01})
+        adam_params = {"weight_decay": 0.0,
+                             "lr" : 1e-3}
 
+        self.optimizer = ClippedAdam(adam_params)
+        
         self.load_checkpoint(file_name)
 
         return self
