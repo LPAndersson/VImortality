@@ -12,7 +12,7 @@ param_tuple = ({
     'first_year_train' : 1920,
     'last_year_train' : 2000,
     'first_year_test' : 2001,
-    'last_year_test' : 2019,
+    'last_year_test' : 2021,
     'sex' : "Male", # or Female, Both
     'max_age' : 100,
     'nn_layers' : 1,
@@ -26,7 +26,7 @@ param_tuple = param_tuple + ({
     'first_year_train' : 1920,
     'last_year_train' : 2000,
     'first_year_test' : 2001,
-    'last_year_test' : 2019,
+    'last_year_test' : 2021,
     'sex' : "Male", # or Female, Both
     'max_age' : 100,
     'nn_layers' : 1,
@@ -40,7 +40,7 @@ param_tuple = param_tuple + ({
     'first_year_train' : 1920,
     'last_year_train' : 2000,
     'first_year_test' : 2001,
-    'last_year_test' : 2019,
+    'last_year_test' : 2021,
     'sex' : "Male", # or Female, Both
     'max_age' : 100,
     'nn_layers' : 1,
@@ -54,7 +54,7 @@ param_tuple = param_tuple + ({
     'first_year_train' : 1920,
     'last_year_train' : 2000,
     'first_year_test' : 2001,
-    'last_year_test' : 2019,
+    'last_year_test' : 2021,
     'sex' : "Male", # or Female, Both
     'max_age' : 100,
     'nn_layers' : 1,
@@ -68,7 +68,7 @@ param_tuple = param_tuple + ({
     'first_year_train' : 1920,
     'last_year_train' : 2000,
     'first_year_test' : 2001,
-    'last_year_test' : 2019,
+    'last_year_test' : 2021,
     'sex' : "Male", # or Female, Both
     'max_age' : 100,
     'nn_layers' : 1,
@@ -82,7 +82,7 @@ param_tuple = param_tuple + ({
     'first_year_train' : 1920,
     'last_year_train' : 2000,
     'first_year_test' : 2001,
-    'last_year_test' : 2019,
+    'last_year_test' : 2021,
     'sex' : "Male", # or Female, Both
     'max_age' : 100,
     'nn_layers' : 1,
@@ -96,7 +96,7 @@ param_tuple = param_tuple + ({
     'first_year_train' : 1920,
     'last_year_train' : 2000,
     'first_year_test' : 2001,
-    'last_year_test' : 2019,
+    'last_year_test' : 2021,
     'sex' : "Male", # or Female, Both
     'max_age' : 100,
     'nn_layers' : 1,
@@ -110,7 +110,7 @@ param_tuple = param_tuple + ({
     'first_year_train' : 1920,
     'last_year_train' : 2000,
     'first_year_test' : 2001,
-    'last_year_test' : 2019,
+    'last_year_test' : 2021,
     'sex' : "Male", # or Female, Both
     'max_age' : 100,
     'nn_layers' : 1,
@@ -124,7 +124,7 @@ param_tuple = param_tuple + ({
     'first_year_train' : 1920,
     'last_year_train' : 2000,
     'first_year_test' : 2001,
-    'last_year_test' : 2019,
+    'last_year_test' : 2021,
     'sex' : "Male", # or Female, Both
     'max_age' : 100,
     'nn_layers' : 1,
