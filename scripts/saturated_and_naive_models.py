@@ -4,13 +4,15 @@ import sys
 
 from datetime import datetime
 
-sys.path.insert(0, './VImortality')
-from mortalityForecast import mortalityForecast as mf
-from mortalityForecast import mortality_data_loader as data_loader
-from mortalityForecast import utils
+import sys
+import importlib
+sys.path.insert(0, '../')
+
+import mortalityForecast as mf
 
 import matplotlib.pyplot as plt
 import numpy as np
+
 import pandas as pd
 from itertools import product
 from itertools import cycle
@@ -24,7 +26,7 @@ last_year = 2021
 param_tuple = tuple()
 
 start_years = range(first_year, last_year - train_length - forecast_length + 2)
-countries = [data_loader.SWEDEN]
+countries = [mf.data_loader.SWEDEN]
 nn_layers = [1]
 latent_dims = [1,2,3,4,5,6,7,8,9]
 
@@ -47,17 +49,18 @@ l = Lock()
 
 def train(param):
 
-    exposure_all, deaths_all = data_loader.load_data(param, train = True, test = True)
-    exposure_train, deaths_train = data_loader.load_data(param, train = True, test = False)
-    exposure_test, deaths_test = data_loader.load_data(param, train = False, test = True)
+    exposure_all, deaths_all = mf.load_data(param, train = True, test = True)
+    exposure_train, deaths_train = mf.load_data(param, train = True, test = False)
+    exposure_test, deaths_test = mf.load_data(param, train = False, test = True)
+
+    model_string = "%s_%d_%d_%s_%d_%d_%d" % (param['country'].name, param['first_year_train'], param['last_year_train'], param['sex'], param['max_age'], param['nn_layers'], param['latent_dim'])
+    file_name = "../trainedModels/" + model_string
+
 
     model = mf.Mortality(param)
+    model = model.load(file_name = file_name, param = param, exposure = exposure_train, deaths = deaths_train )
 
-    file_name = "trained_models/%s_%d_%d_%s_%d_%d_%d" %(param['country'].name, param['first_year_train'], param['last_year_train'], param['sex'], param['max_age'], param['nn_layers'], param['latent_dim'])
-
-    model = model.fit(exposure = exposure_train, deaths = deaths_train, num_steps = 20000, log_freq = 1000, checkpoint_freq = 1000, save_file = file_name)
-
-    log_score = model.log_score(exposure_test, deaths_test, mc_samples = 10000)
+    log_score = model.log_score_naive(exposure_test, deaths_test)
 
     data = list(
     zip(
@@ -71,15 +74,16 @@ def train(param):
         range(1,len(log_score)+1),
         log_score,
         cycle([datetime.now().strftime("%d/%m/%Y")]),
-        cycle([datetime.now().strftime("%H:%M:%S")])
+        cycle([datetime.now().strftime("%H:%M:%S")]),
+        cycle(['naive'])
         )
     )
     
     df = pd.DataFrame(data,
-                  columns = ['Country', 'first_year_train', 'last_year_train', 'Sex','max_age', 'nn_layers', 'latent_dim', 'Forecast horizon', 'Log score', 'Date', 'Time'])
+                  columns = ['Country', 'first_year_train', 'last_year_train', 'Sex','max_age', 'nn_layers', 'latent_dim', 'Forecast horizon', 'Log score', 'Date', 'Time', 'Model'])
 
 
-    out_path = 'results-230126' + '.csv'
+    out_path = 'results_naive_saturated' + '.csv'
     
     l.acquire()
     try:
