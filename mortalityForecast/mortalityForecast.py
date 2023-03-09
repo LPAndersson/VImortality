@@ -11,8 +11,6 @@ import torch.nn as nn
 from scipy.stats import poisson
 from scipy.special import logsumexp
 
-import scipy
-
 import pyro
 import pyro.distributions as dist
 import pyro.poutine as poutine
@@ -617,7 +615,7 @@ class Mortality:
         
         return (level_forecast_loc.detach(), level_forecast_scale.detach())
 
-    def evaluate(self, e, d, mc_samples = 1000):
+    def log_score(self, e, d, mc_samples = 1000):
 
         forecast_length = len(e)
 
@@ -635,6 +633,36 @@ class Mortality:
             log_score_t[t] = - np.sum( logsumexp(log_score, axis = 0) - np.log(mc_samples) )
         
         return log_score_t
+    
+    def log_score_saturated(self, e, d):
+        forecast_length = len(e)
+        log_score_t = np.empty(forecast_length)
+        log_score = np.empty(self.num_ages)
+
+        intensity = d/e
+
+        for t in range(forecast_length):
+            for age in range(self.num_ages):
+                log_score[age] = poisson.logpmf(d[t,age], intensity[t,age] * e[t,age])
+            log_score_t[t] = - np.sum( log_score, axis = 0)
+
+        return log_score_t
+
+    def log_score_naive(self, e, d):
+        forecast_length = len(e)
+        log_score_t = np.empty(forecast_length)
+        log_score = np.empty(self.num_ages)
+
+        intensity = self.data[0][-1,:]/self.data[1][-1,:]
+
+        for t in range(forecast_length):
+            for age in range(self.num_ages):
+                log_score[age] = poisson.logpmf(d[t,age], intensity[age] * e[t,age])
+            log_score_t[t] = - np.sum( log_score, axis = 0)
+
+        return log_score_t
+
+
         
         
 

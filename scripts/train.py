@@ -9,129 +9,16 @@ import multiprocessing
 
 param_tuple = ({
     'country' : data_loader.SWEDEN,
-    'first_year_train' : 1920,
-    'last_year_train' : 2000,
-    'first_year_test' : 2001,
+    'first_year_train' : 1952,
+    'last_year_train' : 2011,
+    'first_year_test' : 2012,
     'last_year_test' : 2021,
     'sex' : "Male", # or Female, Both
     'max_age' : 100,
     'nn_layers' : 1,
-    'latent_dim' : 4,
-    'weight_decay' : 0.0
-    'lr' : 1e-1
+    'latent_dim' : 3
 },)
 
-param_tuple = param_tuple + ({
-    'country' : data_loader.SWEDEN,
-    'first_year_train' : 1920,
-    'last_year_train' : 2000,
-    'first_year_test' : 2001,
-    'last_year_test' : 2021,
-    'sex' : "Male", # or Female, Both
-    'max_age' : 100,
-    'nn_layers' : 1,
-    'latent_dim' : 4,
-    'weight_decay' : 0.0
-    'lr' : 1e-2
-},)
-
-param_tuple = param_tuple + ({
-    'country' : data_loader.SWEDEN,
-    'first_year_train' : 1920,
-    'last_year_train' : 2000,
-    'first_year_test' : 2001,
-    'last_year_test' : 2021,
-    'sex' : "Male", # or Female, Both
-    'max_age' : 100,
-    'nn_layers' : 1,
-    'latent_dim' : 4,
-    'weight_decay' : 0.0
-    'lr' : 1e-3
-},)
-
-param_tuple = param_tuple + ({
-    'country' : data_loader.SWEDEN,
-    'first_year_train' : 1920,
-    'last_year_train' : 2000,
-    'first_year_test' : 2001,
-    'last_year_test' : 2021,
-    'sex' : "Male", # or Female, Both
-    'max_age' : 100,
-    'nn_layers' : 1,
-    'latent_dim' : 4,
-    'weight_decay' : 1.0
-    'lr' : 1e-1
-},)
-
-param_tuple = param_tuple + ({
-    'country' : data_loader.SWEDEN,
-    'first_year_train' : 1920,
-    'last_year_train' : 2000,
-    'first_year_test' : 2001,
-    'last_year_test' : 2021,
-    'sex' : "Male", # or Female, Both
-    'max_age' : 100,
-    'nn_layers' : 1,
-    'latent_dim' : 4,
-    'weight_decay' : 1.0
-    'lr' : 1e-2
-},)
-
-param_tuple = param_tuple + ({
-    'country' : data_loader.SWEDEN,
-    'first_year_train' : 1920,
-    'last_year_train' : 2000,
-    'first_year_test' : 2001,
-    'last_year_test' : 2021,
-    'sex' : "Male", # or Female, Both
-    'max_age' : 100,
-    'nn_layers' : 1,
-    'latent_dim' : 4,
-    'weight_decay' : 1.0
-    'lr' : 1e-3
-},)
-
-param_tuple = param_tuple + ({
-    'country' : data_loader.SWEDEN,
-    'first_year_train' : 1920,
-    'last_year_train' : 2000,
-    'first_year_test' : 2001,
-    'last_year_test' : 2021,
-    'sex' : "Male", # or Female, Both
-    'max_age' : 100,
-    'nn_layers' : 1,
-    'latent_dim' : 4,
-    'weight_decay' : 2.0
-    'lr' : 1e-1
-},)
-
-param_tuple = param_tuple + ({
-    'country' : data_loader.SWEDEN,
-    'first_year_train' : 1920,
-    'last_year_train' : 2000,
-    'first_year_test' : 2001,
-    'last_year_test' : 2021,
-    'sex' : "Male", # or Female, Both
-    'max_age' : 100,
-    'nn_layers' : 1,
-    'latent_dim' : 4,
-    'weight_decay' : 2.0
-    'lr' : 1e-2
-},)
-
-param_tuple = param_tuple + ({
-    'country' : data_loader.SWEDEN,
-    'first_year_train' : 1920,
-    'last_year_train' : 2000,
-    'first_year_test' : 2001,
-    'last_year_test' : 2021,
-    'sex' : "Male", # or Female, Both
-    'max_age' : 100,
-    'nn_layers' : 1,
-    'latent_dim' : 4,
-    'weight_decay' : 2.0
-    'lr' : 1e-3
-},)
 
 def train(param):
 
@@ -139,11 +26,18 @@ def train(param):
     exposure_train, deaths_train = data_loader.load_data(param, train = True, test = False)
     exposure_test, deaths_test = data_loader.load_data(param, train = False, test = True)
 
-    model = mf.Mortality(param, cuda = False)
+    model = mf.Mortality(param)
 
-    file_name = "trainedModels/%s_%d_%d_%s_%d_%d_%d_%d_%d" %(param['country'].name, param['first_year_train'], param['last_year_train'], param['sex'], param['max_age'], param['nn_layers'], param['latent_dim'],param['weight_decay'], param['lr'])
+    file_name = "trainedModels/test_%s_%d_%d_%s_%d_%d_%d" %(param['country'].name, param['first_year_train'], param['last_year_train'], param['sex'], param['max_age'], param['nn_layers'], param['latent_dim'])
 
-    model = model.fit(exposure = exposure_train, deaths = deaths_train, num_steps = 10000, log_freq = 10, checkpoint_freq = 100, save_file = file_name)
+    model = model.fit(exposure = exposure_train, 
+                      deaths = deaths_train, 
+                      num_steps = 1000,# 60000, 
+                      log_freq = 10, 
+                      lr = 0.01,
+                      checkpoint_freq = 100,
+                      lr_decay = 0.9999,
+                      save_file = file_name)
 
 
 if __name__ == '__main__':

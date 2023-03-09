@@ -57,7 +57,7 @@ def train(param):
 
     model = model.fit(exposure = exposure_train, deaths = deaths_train, num_steps = 20000, log_freq = 1000, checkpoint_freq = 1000, save_file = file_name)
 
-    log_score = model.evaluate(exposure_test, deaths_test, mc_samples = 10000)
+    log_score = model.log_score(exposure_test, deaths_test, mc_samples = 10000)
 
     data = list(
     zip(
@@ -87,7 +87,6 @@ def train(param):
         print(param['id'])
     finally:
         l.release()
-
 
 if __name__ == '__main__':
 
