@@ -1,0 +1,259 @@
+\documentclass[preprint,12pt]{elsarticle}
+
+\usepackage{lineno,hyperref}
+\modulolinenumbers[5]
+
+\usepackage[utf8]{inputenc}
+\usepackage{amsmath,amssymb,amsthm,mathrsfs,amsfonts,todonotes,soul}
+\usepackage{graphicx,fancyhdr,lastpage,tocloft}
+\usepackage{bm,bbm}
+\usepackage{hyperref}
+\hypersetup{
+  hidelinks
+}
+\usepackage{comment}
+\usepackage{natbib}
+\usepackage{color}
+\usepackage{subfig}
+\usepackage{xcolor}
+\usepackage{relsize}
+\usepackage{accents}
+
+%\usepackage{refcheck}
+\usepackage{mathtools}
+\newcommand{\ra}{\Rightarrow}
+\newcommand{\lra}{\Leftrightarrow}
+\def\eqd{\,{\buildrel d \over =}\,} 
+\def\Var{\textup{Var}}
+\def\Cov{\textup{Cov}}
+\def\Sd{\mathsf{Sd}\,}
+\def\E{\mathsf{E}\,}
+\def\phat{{\hat p}} 
+\def\Fbar{{\overline F}}
+\def\inprob{\,{\buildrel p \over \rightarrow}\,}
+\def\inL2{\,{\buildrel L_2 \over \rightarrow}\,}
+\def\eqd{\,{\buildrel d \over =}\,} 
+\def\law{\rightarrow_d}
+\def\prob{\mathbb{P}}
+\def\Skorohod{\,{\buildrel J_1 \over \Rightarrow}\,}
+\def\pp{\partial}
+\newcommand{\indep}{\rotatebox[origin=c]{90}{$\models$}}
+\newcommand{\ubar}[1]{\underaccent{\bar}{#1}}
+\newcommand{\ml}[1]{{\color{red} #1}}
+\newcommand{\lpa}[1]{{\color{blue} #1}}
+
+\newcommand{\m}[1]{\begin{pmatrix}
+#1
+\end{pmatrix}}
+
+\newcommand{\bra}[1]{\left[#1\right]}
+\newcommand{\cur}[1]{\left\{#1\right\}}
+\newcommand{\pa}[1]{\left(#1\right)}
+\newcommand{\abs}[1]{\left|#1\right|}
+\newcommand{\floor}[1]{\lfloor #1\rfloor}
+
+%Following ISO 80000-2:2009
+% The number `e'.
+\def\ee{\ensuremath{\mathrm{e}}}
+% The imaginary unit.
+\def\ii{\ensuremath{\mathrm{i}}}
+% The differential operator.
+\def\dd{\ensuremath{\mathrm{d}}}
+
+\journal{International Journal of Forecasting}
+
+%%%%%%%%%%%%%%%%%%%%%%%
+%% Elsevier bibliography styles
+%%%%%%%%%%%%%%%%%%%%%%%
+%% To change the style, put a % in front of the second line of the current style and
+%% remove the % from the second line of the style you would like to use.
+%%%%%%%%%%%%%%%%%%%%%%%
+
+%% Numbered
+%\bibliographystyle{model1-num-names}
+
+%% Numbered without titles
+%\bibliographystyle{model1a-num-names}
+
+%% Harvard
+%\bibliographystyle{model2-names.bst}\biboptions{authoryear}
+
+%% Vancouver numbered
+%\usepackage{numcompress}\bibliographystyle{model3-num-names}
+
+%% Vancouver name/year
+%\usepackage{numcompress}\bibliographystyle{model4-names}\biboptions{authoryear}
+
+%% APA style
+%\bibliographystyle{model5-names}\biboptions{authoryear}
+
+%% AMA style
+%\usepackage{numcompress}\bibliographystyle{model6-num-names}
+
+%% `Elsevier LaTeX' style
+\bibliographystyle{elsarticle-num}
+%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{document}
+
+\begin{frontmatter}
+
+\title{Mortality forecasting using variational inference}
+%% Group authors per affiliation:
+\author{Patrik Andersson}
+\address{Uppsala University}
+\author{Mathias Lindholm}
+\address{Stockholm University}
+
+\begin{abstract}
+This template helps you to create a properly formatte
+\end{abstract}
+
+\begin{keyword}
+Non-linear state-space-models \sep Mortality forecasting \sep Hidden Markov model \sep variational inference
+\end{keyword}
+
+\end{frontmatter}
+
+\linenumbers
+
+\section{Introduction}
+Attempts to forecast mortality goes back perhaps as far as \cite{gompertz1825nature}. A more recent example is the Lee-Carter model \citep{lee1992modeling} and its extensions, see \cite{booth2008mortality, haberman2011comparative, carfora2017quantitative} for a survey. Applications of mortality forecasting can be found in for example demographic predictions and in the insurance industry.
+
+The Lee-Carter model is a log-linear multivariate Gaussian model of mortality rates. A major criticism of Lee-Carter-type models is that the model training is done as a two-step process. In a first step, point estimates of the mortality rates are obtained, for example as the maximum likelihood estimate of a Poisson distribution, and in a second step, a latent process is fitted to these estimates. This method has the advantage that it is simple and fast to implement, but it is inefficient when compared to a simultaneous estimation of all unknown parameters. Also, it is not possible to distinguish between the finite population noise of the mortality estimates and the noise from the latent process. Both of these issues can potentially affect the quality of the forecasts. 
+
+Simultaneous estimation of parameters have been considered in \cite{andersson2020mortality} where particle filtering methods are used for a Poisson Lee-Carter model similar to \cite{brouhns2002poisson}. However, this method has its drawbacks. It could be considered cumbersome for practitioners as it requires custom implementation and tuning, and since the particle filter methods are computationally expensive, the number of parameters must not be too large. The complexity of the modelling, is of course, reduced when removing the Poisson assumption, see e.g.\ \cite{de2006extending} for a simpler state-space model treatment of a standard Gaussian Lee-Carter model.
+
+\lpa{Recently it has been suggested to use models from deep learning, sometimes called deep factor models, to forecast high-dimensional multivariate time series. Some examples of this can be found in \cite{nguyen2021temporal, wang2019deep, salinas2020deepar, rangapuram2018deep}. The applications presented in those articles differ from mortality forecasting in the scale of the problem. In mortality forecasting the dimension of the time series is about 100 (the lifetime in years of a human) and the number of observations of time series is also about 100 (although some countries do have reliable data for longer than that). As a consequence, to avoid overfitting, we need to consider simpler models. This includes shallower networks for mapping latent variables to the observed time series, linear Gaussian models instead of RNNs for propagating the latent variables forward in time and fewer latent factors.}
+
+\lpa{Compared to previous mortality forecasting models, the novelty of this paper is therefore} to use black-box \ml{variational inference (?) (VI)} \citep{ranganath2014black} to solve the inference problem. This means that after specifying how to sample from the model and the approximate posterior, the inference is done automatically without any model specific customisation. The family of models that can be handled is also expanded. For example one can consider neural networks for mapping the latent process to mortality rates. Also, in this case all the parameters can be estimated simultaneously. This latter point is problematic when using particle filter techniques, where it is necessary to estimate the linear mapping from the latent process to the mortality rates in isolation before continuing with the estimation of the other parameters.
+
+Other approaches that use machine learning techniques for forecasting mortality rates can be found in e.g.\ \ml{[W{\"u}thrich \& co]} that consider various types of Gaussian recurrent neural network structures, \ml{[Italienarna, Lindholm \& Palmborg]} that consider univariate LSTM NNs, both with and without a Poisson population assumption, and see \ml{[xx]} that consider tree-based techniques.
+
+The model is implemented using the probabilistic programming language Pyro \citep{bingham2018pyro} and the code is available on Github\ml{, see [reference]}.
+
+The rest of the paper is organised as follows: In Section \ref{sec:model} we describe the probabilistic model that will be used for forecasting. In Section \ref{sec:vi} we give a brief introduction to variational inference and in Section \ref{sec:forecastValidation} we describe how to forecast the mortality once the model has been trained and how we validate the forecast. In Section \ref{sec:results} we demonstrate our method on a few examples. Section \ref{sec:conclusions} concludes the paper.
+
+
+\section{Model}\label{sec:model}
+In this section we describe the probabilistic model that define the mortality dynamics. Uppercase letters will denote random variables and lowercase letters the corresponding observed value. Greek letters will denote unknown parameters that are to be estimated. 
+
+Mortality data can be aggregated in different forms and clearly the choice of model will have to be adjusted accordingly. For example, the data could contain the population size of each age group at the beginning of the year and the number of deaths during the year. In this case a binomial model seems natural. We however consider data on the yearly number of deaths and the \emph{exposure to risk} in each age group. The exposure to risk in this setting is the total time that the individuals in the population were a certain age in a certain year.  The number of deaths in age $a\in \cur{0,1,\ldots, \bar a}$, year $t\in \cur{0,1,\ldots, \bar t}$ is denoted by $D_{a,t}$ and the exposure by $E_{a,t}$. 
+
+Our model is a dynamic factor model that can be written as:
+\begin{align}
+	& D_{a,t}\mid X_t,E_{a,t} \sim  \mathsf{Poisson}\pa{E_{a,t}\exp\pa{f^\psi_{a}(X_t)}},\label{eq:deathDist}\\
+	& X_{i,t} =X_{i,t-1} + K_{i,t-1} + U_{i,t},\quad U_{i,t} \text{ iid }  \mathsf{N}(0,\sigma^2_{X,i}),\label{eq:state_level}\\
+	& K_{i,t} = \mu_i + \varphi_i(K_{i,t-1} - \mu_i) + V_{i,t},\quad V_{i,t} \text{ iid }   \mathsf{N}(0,\sigma^2_{K,i}).\label{eq:state_trend}
+\end{align}
+Here $i=1,2,\ldots , d$, where $d$ is the dimension of the latent variables. We also require $0\leq \varphi_i \leq 1$. The function $f^\psi_a$ is the $a$:th component of $f^\psi:\mathbb R^d \to \mathbb R^{\bar a+1}$. In our examples in Section~\ref{sec:results} $f$ will be given by a shallow neural network.\todo{When you say ``shallow'', you don't allow for interactions?}
+
+We remark here that the exact specification of the above model is not critical for the continuation. For example, the exponential link-function in the Poisson-distribution could be changed to some other positive differentiable function without complication. We are assuming that the components of the latent process are independent, instead letting any dependence \todo{see previous comment about ``shallow'' networks} be captured by $f$. However this latent process could be replaced with some other Markov process.
+
+\section{Variational inference}\label{sec:vi}
+Here we explain the main ideas of variational inference (VI) in a general setting. At the end of the section, we connect this to our specific model. For more on VI in general we refer to \cite{ranganath2014black} and for the application to state space models, see \cite{archer2015black}.
+ 
+We are observing $y$, whose distribution depends on a latent variable $x$ and an unknown parameter $\psi$. This is modelled by the joint distribution
+\begin{equation}
+	p_\psi(y,x) = p_\psi(y\mid x)p_\psi(x).
+\end{equation}
+The likelihood,
+\begin{equation}
+	L(\psi)=p_\psi(y) = \int p_\psi(y,x)\dd x,
+\end{equation}
+is in general not tractable and therefore approximations are needed in order to be able to estimate $\psi$.
+Consider a parametrised distribution, the approximate posterior, $q_\theta(x)$. Then observe that, due to Jensen's inequality, the log-likelihood is
+\begin{align*}
+	l(\psi):=&\log L(\psi) = \log \int \frac{p_\psi(y,x)}{q_\theta(x)} q_\theta(x)\dd x  \\
+    \geq &\int \pa{\log p_\psi(y,x) - \log q_\theta(x)}q_\theta(x)\dd x=:\mathcal L(\psi,\theta).
+\end{align*}
+The right-hand side is known as the evidence lower bound (ELBO). The idea of VI is to instead of maximising the log-likelihood, maximise the ELBO. Towards this we calculate the gradients
+\begin{align}
+	\partial_\psi \mathcal L(\varphi,\theta) &= \int \partial_\psi \log p_\psi(y,x)q_\theta(x) \dd x ,\\
+	\partial_\theta \mathcal L(\psi,\theta) &=  \int (\log p_\psi(y,x) - \log q_\theta(x))\partial_\theta \log q_\theta(x)  q_\theta(x)   \dd x.
+\end{align}
+
+We can then proceed to obtain unbiased estimates of the gradients by sampling from $q_\theta$ and maximise $\mathcal L$ using stochastic optimisation algorithms. Once converged,  $q_\theta(x)$ can be used as an approximation of the posterior distribution of the latent variables $p_\psi(x\mid y)$.
+
+Further, to obtain faster convergence, various variance reduction techniques are often used. Here we only mention the so-called reparametrisation trick. Suppose that we can find functions $x_\theta$ such that
+\begin{equation}\label{eq: reparametrisation trick}
+	\int f(x) q_\theta(x)\dd x = \int f(x_\theta(z))q(z)\dd z,
+\end{equation}
+which makes the sampling distribution independent of $\theta$. In particular, the gradient satisfies
+\begin{equation}
+	\partial_\theta \int f(x) q_\theta(x)\dd x = \partial_\theta \int f(x_\theta(z))q(z)\dd z = \int \pp_\theta f(x_\theta(z))q(z)\dd z,
+\end{equation}
+which usually improves the sampling variance compared to differentiating the density directly. An important example of a distribution that allows for reparametrisation according to \eqref{eq: reparametrisation trick} is the Gaussian, since if $Z\sim \mathsf N(0,1)$ then $\mu + \sigma Z\sim \mathsf N (\mu,\sigma^2)$.
+
+In the numerical illustrations in Section~\ref{sec:results}, the approximate posterior is modelled as a Gaussian distribution with an autoregressive covariance. That is, the distribution of the process is given by
+\begin{align}
+	\tilde X_{i,t} &= \tilde\mu^X_{i,t } + \alpha_{i,t}\tilde X_{i,t-1}  + \tilde e^X_{i,t},\quad \tilde e^X_{i,t} \text{ iid } \mathsf N(0,\tilde\sigma^2_{X,i}),\\
+	\tilde K_{i,t} &= \tilde \mu^K_{i,t} + \beta_{i,t}\tilde K_{i,t-1} + \rho_{i,t}\tilde X_{t-1} + \tilde e^K_{i,t},\quad \tilde e^K_{i,t} \text{ iid } \mathsf N(0,\tilde \sigma^2_{K,i}).
+\end{align}
+
+
+
+
+\section{Forecasting and validation}\label{sec:forecastValidation}
+Here we discuss how to forecast the mortality after maximising the ELBO and thus obtaining estimates of $\varphi$, $\theta$ and, in particular, the joint distribution of $(\tilde X_{i,\bar t},\tilde K_{i,\bar t})$.
+
+Since both the approximate posterior and the latent process is Gaussian, the forecasting distribution of the latent process is also Gaussian. That is, for $t>\bar t$,
+\begin{equation}
+\m{
+\hat X_{i,t}\\ \hat K_{i,t}} 
+\sim \mathsf N\pa{
+\m{\hat\mu^X_{i,t}\\
+\hat\mu^K_{i,t}}
+,
+\m{
+\hat \sigma^2_{X,t} & \hat\rho_{i,t}\hat \sigma_{X,t}\hat \sigma_{K,t}\\
+ \hat\rho_{i,t}\hat \sigma_{X,t}\hat \sigma_{K,t} & \hat \sigma^2_{K,t}
+}
+},
+\end{equation}
+where the parameters can be calculated iteratively from \eqref{eq:state_level} and \eqref{eq:state_trend}, by using the initial value
+\begin{equation}
+	\m{
+\hat X_{i,\bar t}\\ \hat K_{i,\bar t}}:=  	\m{
+\tilde X_{i,\bar t}\\ \tilde K_{i,\bar t}},
+\end{equation}
+and  the forecast of mortality rates is given by $\exp(f^{\hat \psi}(\hat X_t))$.
+
+If one wants to forecast the actual number of deaths, a forecast of the number of living at the beginning of the year is also needed, together with some assumption on the distribution of when in the year people are born. For a longer discussion on how this can be done, we refer to \cite{andersson2020mortality}.
+
+The forecast is validated by calculating the logarithmic score of the forecast on the validation data set, see for example \cite{gneiting2007strictly}. That is, the mortality rates are forecasted and multiplied by the observed exposure-to-risk in each age group, giving the intensity of the Poisson distributed number of deaths in each age group. The logarithmic score of each age group is summed to give the total logarithmic score for a given year.
+
+\section{Results}\label{sec:results}
+First choose a model, then illustrate...
+
+
+In this section we illustrate the results by fitting the model using two datasets, Swedish males between the years 1920 and 2000, and US males between 19xx and 2000. We then forecast from 2001 to 2021. Both datasets are collected from \cite{hmd2018data}.
+
+We then compare the results from the different model using the log-score.
+
+
+
+
+The model is as in \eqref{eq:deathDist} - \eqref{eq:state_trend} where $f$ is either a 1 (i.e.\ affine) or a 2-layer neural network with ReLU activation and the middle layer is of dimension 100. We compare $d=1,\ldots 6$.
+
+\begin{figure}[hbt]
+\begin{center}
+  \includegraphics[width=0.7\textwidth]{figs/latent_dim_comparison.pdf}
+  \caption{}
+  \end{center}
+\end{figure}
+\begin{figure}[hbt]
+\begin{center}
+  \includegraphics[width=0.7\textwidth]{figs/model_comparison.pdf}
+  \caption{}
+  \end{center}
+\end{figure}
+
+
+
+
+\section{Conclusions}\label{sec:conclusions}
+
+\bibliography{biblio}
+
+\end{document}

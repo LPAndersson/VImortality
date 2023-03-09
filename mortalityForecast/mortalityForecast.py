@@ -17,8 +17,8 @@ import pyro
 import pyro.distributions as dist
 import pyro.poutine as poutine
 from pyro.distributions.transforms import affine_autoregressive
-from pyro.infer import SVI, JitTrace_ELBO, Trace_ELBO, TraceEnum_ELBO, TraceTMC_ELBO, config_enumerate
-from pyro.optim import ClippedAdam
+from pyro.infer import SVI, JitTrace_ELBO, Trace_ELBO, TraceEnum_ELBO, TraceMeanField_ELBO, config_enumerate
+from pyro.optim import ClippedAdam, Adam
 
 from mortalityForecast import utils
 
@@ -46,12 +46,58 @@ class Emitter(nn.Module):
                 nn.ReLU(),
                 nn.Linear(nn_dim, input_dim))
         elif nn_layers == 1:
-            self.decoder = nn.Sequential(
-                nn.Linear(latent_dim, input_dim))
+            # ## Incremental
+            # self.bias = nn.Parameter(torch.zeros(input_dim))
+            # self.weights = nn.Parameter(torch.zeros(latent_dim, input_dim))
+
+            ## General
+            self.decoder = nn.Sequential(nn.Linear(latent_dim, input_dim))
+
+            # ## Polynomial
+            # poly_order = 10
+            # self.w = nn.Parameter(torch.zeros( latent_dim+1,poly_order+1,))
+            # nn.init.uniform_(self.w)
+
+            # ## Radial basis
+            # num_of_basis = 10
+            # #self.mu = nn.Parameter(torch.empty(latent_dim,num_of_basis))
+            # #nn.init.uniform_(self.mu)
+            # mu = torch.tensor(range(num_of_basis))/num_of_basis
+            # self.mu = nn.Parameter(mu.unsqueeze(0).repeat(latent_dim+1,1))
+            # #self.l = nn.Parameter(torch.empty(latent_dim,num_of_basis))
+            # self.l = torch.ones(latent_dim+1,num_of_basis)*10.0
+
+            # self.w = nn.Parameter(torch.empty(latent_dim+1,num_of_basis))
+            # #nn.init.uniform_(self.l)
+            # nn.init.uniform_(self.w)
 
 
     def forward(self, x):
+        # ## Incremental
+        # w = torch.cumsum(self.weights,1)
+        # b = torch.cumsum(self.bias,0)
+        # a = b + torch.matmul(x,w)
+        # return torch.exp(a)
+
+        ## General
         return torch.exp(self.decoder(x))
+
+        # ## Polynomial
+        # ages = torch.tensor(range(self.input_dim))/100.0
+        # a = torch.stack([torch.ones(ages.size()),ages,torch.pow(ages,2),torch.pow(ages,3),torch.pow(ages,4),torch.pow(ages,5),torch.pow(ages,6),torch.pow(ages,7),torch.pow(ages,8),torch.pow(ages,9),torch.pow(ages,10)])
+        # b = self.w@a
+        # x = torch.cat((torch.tensor([1]),x),0)
+
+        # return torch.exp(x@b)
+
+        # ## Radial basis
+        # ages = torch.tensor(range(self.input_dim)).reshape(self.input_dim,1,1)/self.input_dim
+        # p = torch.exp(-torch.pow((ages-self.mu)*self.l,2))
+
+        # x = torch.cat((torch.tensor([1]),x),0)
+
+        # return torch.exp(torch.sum(p*self.w,2) @ x)
+
 
 class LevelTrend(nn.Module):
     """
@@ -83,15 +129,13 @@ class LevelTrend(nn.Module):
         return (level_scale_next, trend_scale_next, covariance_next)
 
 
+class DMM(nn.Module):
 
-class _DMM(nn.Module):
-
-    def __init__(self, num_years, input_dim, emitter, latent_transition, use_cuda = False):
-        super(_DMM, self).__init__()
+    def __init__(self, num_years, input_dim, emitter, latent_transition):
+        super(DMM, self).__init__()
         
         self.num_years = num_years
         self.input_dim = input_dim
-        self.use_cuda = use_cuda
 
         self.emitter = emitter
         self.latent_transition = latent_transition
@@ -109,15 +153,12 @@ class _DMM(nn.Module):
 
         #Guide parameters
         self.guide_level_mean = nn.Parameter(torch.zeros(self.latent_dim,num_years))
-        self.guide_level_scale = nn.Parameter(torch.ones(self.latent_dim,num_years))
+        self.guide_level_scale = nn.Parameter(torch.ones(self.latent_dim,num_years)*0.001)
         self.guide_level_damp = nn.Parameter(torch.zeros(self.latent_dim,num_years-1))
         self.guide_trend_mean = nn.Parameter(torch.zeros(self.latent_dim,num_years))
-        self.guide_trend_scale = nn.Parameter(torch.ones(self.latent_dim,num_years))
+        self.guide_trend_scale = nn.Parameter(torch.ones(self.latent_dim,num_years)*0.001)
         self.guide_trend_damp = nn.Parameter(torch.zeros(self.latent_dim,num_years-1))
         self.guide_corr = nn.Parameter(torch.zeros(self.latent_dim,num_years))
-
-        if use_cuda:
-            self.cuda()
 
     def model(self, data):
 
@@ -204,7 +245,7 @@ class _DMM(nn.Module):
 
 class Mortality:
 
-    def __init__(self, param, cuda = False):
+    def __init__(self, param):
 
         self.emitter = Emitter(input_dim = param['max_age'] + 1, latent_dim = param['latent_dim'], nn_layers = param['nn_layers'])
         
@@ -214,9 +255,14 @@ class Mortality:
         self.num_train_years = param['last_year_train'] - param['first_year_train'] + 1
         self.num_test_years = param['last_year_test'] - param['first_year_test'] + 1
 
-        self.cuda = cuda
-
-    def fit(self, exposure, deaths, num_steps = 1000, log_freq = 1, checkpoint_freq = 10, load_file = None, save_file = None):
+    def fit(self, exposure, deaths, 
+            num_steps = 1000, 
+            log_freq = 100, 
+            checkpoint_freq = 100, 
+            lr = 0.01,
+            lr_decay = 0.1,
+            load_file = None, 
+            save_file = None):
 
         self.num_ages = exposure.shape[1]
         self.num_years = exposure.shape[0]
@@ -224,35 +270,26 @@ class Mortality:
         exposure = torch.from_numpy(exposure)
         deaths = torch.from_numpy(deaths)
             
-        if self.cuda:
-            exposure = exposure.cuda()
-            deaths = deaths.cuda()
-
         self.data = (deaths, exposure)
 
         pyro.clear_param_store()
 
-        self.dmm = _DMM(num_years = self.num_years, input_dim = self.num_ages, emitter = self.emitter, latent_transition  = self.latent_transition, use_cuda = self.cuda)
+        self.dmm = DMM(num_years = self.num_years, input_dim = self.num_ages, emitter = self.emitter, latent_transition  = self.latent_transition)
 
-        #self.optimizer = RMSprop({"lr": 0.01})
-        #self.optimizer = Adagrad({"lr": 0.1})
-
-        # if (self.weight_decay):
-        #     adam_params = {"weight_decay": 2.0,
-        #                     "lr" : self.lr}
-        # else:
-        #     adam_params = {"weight_decay": 0.0,
-        #                     "lr" : self.lr}
-
-        adam_params = {"weight_decay": 0.0,
-                             "lr" : 1e-3}
+        adam_params = {
+        'betas' : (0.95, 0.999),
+        "lr": lr,
+        "lrd": lr_decay,
+        "clip_norm": 10,
+        "weight_decay": 0.0
+        }
 
         self.optimizer = ClippedAdam(adam_params)
 
         if load_file is not None:
             self.load_checkpoint(load_file)
 
-        svi = SVI(self.dmm.model, self.dmm.guide, self.optimizer, loss=Trace_ELBO())
+        svi = SVI(self.dmm.model, self.dmm.guide, self.optimizer, loss=TraceMeanField_ELBO())
 
         vi_times = [time.time()]
 
@@ -263,7 +300,14 @@ class Mortality:
 
             loss += svi.step(self.data)
 
+            # if (step + 1) % decay_step == 0: # decay learning rate
+            #     self.scheduler.step()
+
             if (step + 1) % log_freq == 0: # report training diagnostics
+                # print(self.dmm.emitter.w)
+                # print(self.dmm.emitter.mu)
+                # print(self.dmm.emitter.l)
+
                 vi_times.append(time.time())
                 self.train_loss.append(loss/checkpoint_freq)
                 epoch_time = vi_times[-1] - vi_times[-2]
@@ -286,17 +330,13 @@ class Mortality:
 
         exposure = torch.from_numpy(exposure)
         deaths = torch.from_numpy(deaths)
-            
-        if self.cuda:
-            exposure = exposure.cuda()
-            deaths = deaths.cuda()
 
         self.data = (deaths, exposure)
 
-        self.dmm = _DMM(num_years = self.num_years, input_dim = self.num_ages, emitter = self.emitter, latent_transition  = self.latent_transition)
+        self.dmm = DMM(num_years = self.num_years, input_dim = self.num_ages, emitter = self.emitter, latent_transition  = self.latent_transition)
 
-        adam_params = {"weight_decay": 0.0,
-                             "lr" : 1e-3}
+        adam_params = {
+        }
 
         self.optimizer = ClippedAdam(adam_params)
         
