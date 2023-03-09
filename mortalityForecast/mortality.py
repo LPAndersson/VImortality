@@ -1,12 +1,14 @@
-import argparse
-import time
+from .emitter import Emitter
+from .level_trend import LevelTrend
+from .dmm import DMM
+from .utils import *
+
 from os.path import exists
 
-import copy
-
-import numpy as np
 import torch
-import torch.nn as nn
+import numpy as np
+
+import time
 
 from scipy.stats import poisson
 from scipy.special import logsumexp
@@ -17,229 +19,6 @@ import pyro.poutine as poutine
 from pyro.distributions.transforms import affine_autoregressive
 from pyro.infer import SVI, JitTrace_ELBO, Trace_ELBO, TraceEnum_ELBO, TraceMeanField_ELBO, config_enumerate
 from pyro.optim import ClippedAdam, Adam
-
-from mortalityForecast import utils
-
-class Emitter(nn.Module):
-    #Parameterizes `p(x_t | z_t)`
-
-    def __init__(self, input_dim, latent_dim = 3, nn_dim = 32, nn_layers = 2):
-        super(Emitter, self).__init__()
-
-        self.input_dim = input_dim
-        self.latent_dim = latent_dim
-        self.nn_dim = nn_dim
-        self.nn_layers = nn_layers
-
-        if nn_layers == 3:
-            self.decoder = nn.Sequential(
-                nn.Linear(latent_dim, nn_dim),
-                nn.ReLU(),
-                nn.Linear(nn_dim, nn_dim),
-                nn.ReLU(),
-                nn.Linear(nn_dim, input_dim))
-        elif nn_layers == 2:
-            self.decoder = nn.Sequential(
-                nn.Linear(latent_dim, nn_dim),
-                nn.ReLU(),
-                nn.Linear(nn_dim, input_dim))
-        elif nn_layers == 1:
-            # ## Incremental
-            # self.bias = nn.Parameter(torch.zeros(input_dim))
-            # self.weights = nn.Parameter(torch.zeros(latent_dim, input_dim))
-
-            ## General
-            self.decoder = nn.Sequential(nn.Linear(latent_dim, input_dim))
-
-            # ## Polynomial
-            # poly_order = 10
-            # self.w = nn.Parameter(torch.zeros( latent_dim+1,poly_order+1,))
-            # nn.init.uniform_(self.w)
-
-            # ## Radial basis
-            # num_of_basis = 10
-            # #self.mu = nn.Parameter(torch.empty(latent_dim,num_of_basis))
-            # #nn.init.uniform_(self.mu)
-            # mu = torch.tensor(range(num_of_basis))/num_of_basis
-            # self.mu = nn.Parameter(mu.unsqueeze(0).repeat(latent_dim+1,1))
-            # #self.l = nn.Parameter(torch.empty(latent_dim,num_of_basis))
-            # self.l = torch.ones(latent_dim+1,num_of_basis)*10.0
-
-            # self.w = nn.Parameter(torch.empty(latent_dim+1,num_of_basis))
-            # #nn.init.uniform_(self.l)
-            # nn.init.uniform_(self.w)
-
-
-    def forward(self, x):
-        # ## Incremental
-        # w = torch.cumsum(self.weights,1)
-        # b = torch.cumsum(self.bias,0)
-        # a = b + torch.matmul(x,w)
-        # return torch.exp(a)
-
-        ## General
-        return torch.exp(self.decoder(x))
-
-        # ## Polynomial
-        # ages = torch.tensor(range(self.input_dim))/100.0
-        # a = torch.stack([torch.ones(ages.size()),ages,torch.pow(ages,2),torch.pow(ages,3),torch.pow(ages,4),torch.pow(ages,5),torch.pow(ages,6),torch.pow(ages,7),torch.pow(ages,8),torch.pow(ages,9),torch.pow(ages,10)])
-        # b = self.w@a
-        # x = torch.cat((torch.tensor([1]),x),0)
-
-        # return torch.exp(x@b)
-
-        # ## Radial basis
-        # ages = torch.tensor(range(self.input_dim)).reshape(self.input_dim,1,1)/self.input_dim
-        # p = torch.exp(-torch.pow((ages-self.mu)*self.l,2))
-
-        # x = torch.cat((torch.tensor([1]),x),0)
-
-        # return torch.exp(torch.sum(p*self.w,2) @ x)
-
-
-class LevelTrend(nn.Module):
-    """
-    Parameterizes the gaussian latent transition probability `p(z_t | z_{t-1})`
-    """
-
-    def __init__(self, latent_dim = 3):
-        super(LevelTrend, self).__init__()
-
-        self.latent_dim = latent_dim
-        self.dampening = nn.Parameter(torch.zeros(latent_dim))
-        self.trend_mean = nn.Parameter(torch.zeros(latent_dim))
-
-    def forward(self, level_prev, trend_prev):
-
-        damp = utils.sigmoid(self.dampening, min = 0.0, max = 1.0)
-        trend_mean = self.trend_mean
-
-        return (level_prev + trend_prev, trend_mean + damp * (trend_prev - trend_mean ) )
-
-    def forward_cov(self, level_scale, trend_scale, covariance, level_noise_scale, trend_noise_scale):
-
-        damp = utils.sigmoid(self.dampening, min = 0.0, max = 1.0)
-
-        level_scale_next = torch.sqrt( level_scale**2 + trend_scale**2 + 2*covariance + level_noise_scale**2 )
-        trend_scale_next = torch.sqrt( (damp * trend_scale)**2 + trend_noise_scale**2 )
-        covariance_next = damp * covariance + damp * ( trend_scale**2 )
-
-        return (level_scale_next, trend_scale_next, covariance_next)
-
-
-class DMM(nn.Module):
-
-    def __init__(self, num_years, input_dim, emitter, latent_transition):
-        super(DMM, self).__init__()
-        
-        self.num_years = num_years
-        self.input_dim = input_dim
-
-        self.emitter = emitter
-        self.latent_transition = latent_transition
-
-        self.latent_dim = self.emitter.latent_dim
-
-        self.scale_transform = nn.Softplus()
-        self.scale_transform_inv = utils.softplus_inv
-
-        #Model parameters
-        self.level_0 = nn.Parameter(torch.zeros(self.latent_dim))
-        self.trend_0 = nn.Parameter(torch.zeros(self.latent_dim))
-        self.level_scale = nn.Parameter(torch.ones(self.latent_dim))
-        self.trend_scale = nn.Parameter(torch.ones(self.latent_dim))
-
-        #Guide parameters
-        self.guide_level_mean = nn.Parameter(torch.zeros(self.latent_dim,num_years))
-        self.guide_level_scale = nn.Parameter(torch.ones(self.latent_dim,num_years)*0.001)
-        self.guide_level_damp = nn.Parameter(torch.zeros(self.latent_dim,num_years-1))
-        self.guide_trend_mean = nn.Parameter(torch.zeros(self.latent_dim,num_years))
-        self.guide_trend_scale = nn.Parameter(torch.ones(self.latent_dim,num_years)*0.001)
-        self.guide_trend_damp = nn.Parameter(torch.zeros(self.latent_dim,num_years-1))
-        self.guide_corr = nn.Parameter(torch.zeros(self.latent_dim,num_years))
-
-    def model(self, data):
-
-        deaths, exposure = data
-        
-        pyro.module("dmm", self)
-
-        level_prev = self.level_0
-        trend_prev = self.trend_0
-
-        for t in range(self.num_years):
-
-            (level_loc, trend_loc) = self.latent_transition(level_prev, trend_prev)
-                
-            # scale is standard deviation    
-            level = pyro.sample("level_%d" % t, dist.Normal(level_loc, self.scale_transform(self.level_scale) ).to_event(1))
-            trend = pyro.sample("trend_%d" % t, dist.Normal(trend_loc, self.scale_transform(self.trend_scale) ).to_event(1))
-
-            # compute the intensities that parameterize the Poisson likelihood
-            intensity_t = self.emitter(level)
-            
-            for i in range( len(deaths[t, :]) ):
-                if exposure[t, i] > 0 and intensity_t[i] > 0 :
-                    pyro.sample("obs_%d_%d" % (t, i+1),
-                            dist.Poisson(intensity_t[i] * exposure[t, i], validate_args = False),
-                            obs=deaths[t, i])
-
-            level_prev = level
-            trend_prev = trend
-
-    def guide(self, data):
-
-        deaths, exposure = data
-
-        level_vec =  torch.zeros(self.latent_dim, self.num_years)
-        trend_vec = torch.zeros(self.latent_dim, self.num_years)
-
-        pyro.module("dmm", self)
-
-        level_mean = self.guide_level_mean[:,0]
-        level_scale = self.scale_transform(self.guide_level_scale[:,0])
-
-        level = pyro.sample("level_0", 
-                            dist.Normal(level_mean, level_scale)
-                            .to_event(1))
-
-        corr = utils.sigmoid(self.guide_corr[:,0], min = -1.0, max = 1.0)
-
-        trend_mean = self.guide_trend_mean[:,0] + corr * level
-        trend_scale = self.scale_transform(self.guide_trend_scale[:,0])
-
-        trend = pyro.sample("trend_0", 
-                            dist.Normal(trend_mean, trend_scale )
-                            .to_event(1))
-
-        level_vec[:,0] = level
-        trend_vec[:,0] = trend
-
-        for t in range(1, self.num_years):
-
-            corr = utils.sigmoid(self.guide_corr[:,t], min = -1.0, max = 1.0)
-            
-            level_damp = utils.sigmoid(self.guide_level_damp[:,t-1], min = 0.0, max = 1.0)
-            trend_damp = utils.sigmoid(self.guide_trend_damp[:,t-1], min = 0.0, max = 1.0)
-
-            level_mean = self.guide_level_mean[:,t] + level_damp * level
-            level_scale = self.scale_transform(self.guide_level_scale[:,t])
-
-            level = pyro.sample("level_%d" % (t), 
-                              dist.Normal(level_mean, level_scale )
-                              .to_event(1))
-
-            trend_mean = self.guide_trend_mean[:,t] + trend_damp * trend + corr * level
-            trend_scale = self.scale_transform(self.guide_trend_scale[:,t])
-
-            trend = pyro.sample("trend_%d" % (t), 
-                              dist.Normal(trend_mean, trend_scale )
-                              .to_event(1))
-
-            level_vec[:,t] = level
-            trend_vec[:,t] = trend
-
-        return (level_vec, trend_vec)
 
 class Mortality:
 
@@ -369,7 +148,7 @@ class Mortality:
         out[:,0] = level_mean[:,0]
 
         for i in range(self.dmm.num_years-1):
-            level_damp = utils.sigmoid(self.dmm.guide_level_damp[:,i], min = 0.0, max = 1.0)
+            level_damp = sigmoid(self.dmm.guide_level_damp[:,i], min = 0.0, max = 1.0)
             out[:,i+1] = level_mean[:,i+1] + level_damp * out[:,i]
 
         return out.detach()
@@ -383,7 +162,7 @@ class Mortality:
         out[:,0] = level_scale[:,0]
 
         for i in range(self.dmm.num_years-1):
-            level_damp = utils.sigmoid(self.dmm.guide_level_damp[:,i], min = 0.0, max = 1.0)
+            level_damp = sigmoid(self.dmm.guide_level_damp[:,i], min = 0.0, max = 1.0)
             out[:,i+1] = torch.sqrt(level_scale[:,i+1]**2 + (level_damp * out[:,i])**2)
 
         return out.detach()
@@ -391,17 +170,17 @@ class Mortality:
     @property
     def level_trend_cov(self):
         
-        corr = utils.sigmoid(self.dmm.guide_corr[:,0], min = -1.0, max = 1.0)
+        corr = sigmoid(self.dmm.guide_corr[:,0], min = -1.0, max = 1.0)
         level_scale = self.dmm.scale_transform(self.dmm.guide_level_scale[:,0])
 
         out = torch.zeros((self.dmm.latent_dim, self.dmm.num_years))
         out[:,0] = corr * (level_scale**2)
 
         for i in range(self.dmm.num_years-1):
-            corr = utils.sigmoid(self.dmm.guide_corr[:,i+1], min = -1.0, max = 1.0)
+            corr = sigmoid(self.dmm.guide_corr[:,i+1], min = -1.0, max = 1.0)
 
-            trend_damp = utils.sigmoid(self.dmm.guide_trend_damp[:,i], min = 0.0, max = 1.0)
-            level_damp = utils.sigmoid(self.dmm.guide_level_damp[:,i], min = 0.0, max = 1.0)
+            trend_damp = sigmoid(self.dmm.guide_trend_damp[:,i], min = 0.0, max = 1.0)
+            level_damp = sigmoid(self.dmm.guide_level_damp[:,i], min = 0.0, max = 1.0)
             
             level_scale = self.dmm.scale_transform(self.dmm.guide_level_scale[:,i+1])
 
@@ -413,7 +192,7 @@ class Mortality:
     def trend_loc(self):
 
         trend_mean = self.dmm.guide_trend_mean 
-        corr = utils.sigmoid(self.dmm.guide_corr[:,0], min = -1.0, max = 1.0)
+        corr = sigmoid(self.dmm.guide_corr[:,0], min = -1.0, max = 1.0)
 
         level_mean = self.level_loc
 
@@ -421,8 +200,8 @@ class Mortality:
         out[:,0] = trend_mean[:,0] + corr * level_mean[:,0]
 
         for i in range(self.dmm.num_years-1):
-            corr = utils.sigmoid(self.dmm.guide_corr[:,i+1], min = -1.0, max = 1.0)
-            trend_damp = utils.sigmoid(self.dmm.guide_trend_damp[:,i], min = 0.0, max = 1.0)
+            corr = sigmoid(self.dmm.guide_corr[:,i+1], min = -1.0, max = 1.0)
+            trend_damp = sigmoid(self.dmm.guide_trend_damp[:,i], min = 0.0, max = 1.0)
             out[:,i+1] = trend_mean[:,i+1] + trend_damp*out[:,i] + corr * level_mean[:,i+1]
 
         return out.detach()
@@ -431,7 +210,7 @@ class Mortality:
     def trend_scale(self):
 
         guide_trend_scale = self.dmm.scale_transform(self.dmm.guide_trend_scale)
-        guide_corr = utils.sigmoid(self.dmm.guide_corr[:,0], min = -1.0, max = 1.0)
+        guide_corr = sigmoid(self.dmm.guide_corr[:,0], min = -1.0, max = 1.0)
         level_scale = self.level_scale
         level_trend_cov = self.level_trend_cov
 
@@ -440,19 +219,19 @@ class Mortality:
         out[:,0] = torch.sqrt( guide_trend_scale[:,0]**2 + ( guide_corr * level_scale[:,0] )**2 )
 
         for i in range(self.dmm.num_years-1):
-            corr = utils.sigmoid(self.dmm.guide_corr[:,i+1], min = -1.0, max = 1.0)
-            trend_damp = utils.sigmoid(self.dmm.guide_trend_damp[:,i], min = 0.0, max = 1.0)
+            corr = sigmoid(self.dmm.guide_corr[:,i+1], min = -1.0, max = 1.0)
+            trend_damp = sigmoid(self.dmm.guide_trend_damp[:,i], min = 0.0, max = 1.0)
             out[:,i+1] = torch.sqrt( (guide_trend_scale[:,i+1])**2 + (trend_damp * out[:,i])**2 + (corr*level_scale[:,i+1])**2  + 2*corr*level_trend_cov[:,i+1])
 
         return out.detach()
 
     @property
     def dampening(self):
-        return utils.sigmoid(self.dmm.latent_transition.dampening, min = 0.0, max = 1.0)
+        return sigmoid(self.dmm.latent_transition.dampening, min = 0.0, max = 1.0)
 
     @property
     def correlation(self):
-        return utils.sigmoid(self.dmm.guide_corr, min = -1.0, max = 1.0)
+        return sigmoid(self.dmm.guide_corr, min = -1.0, max = 1.0)
 
     @property
     def guide_sample(self):
@@ -682,12 +461,3 @@ class Mortality:
             log_score_t[t] = - np.sum( log_score, axis = 0)
 
         return log_score_t
-
-
-        
-        
-
-
-
-
-
