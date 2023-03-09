@@ -573,14 +573,35 @@ class Mortality:
 
         (level_loc_forecast, level_scale_forecast) = self.forecast_factors(forecast_length)
 
-        mean_mortality_rate = np.zeros(forecast_length)
-        std_mortality_rate = np.zeros(forecast_length)
+        mean_mortality = np.empty(forecast_length)
+        std_mortality = np.empty(forecast_length)
 
         for t in range(forecast_length):
-            intensity = np.zeros(mc_samples)
+            mortality = np.empty(mc_samples)
             for i in range(mc_samples):
                 factors = torch.distributions.Normal(level_loc_forecast[:,t] , level_scale_forecast[:,t]).sample()
-                intensity[i] = self.dmm.emitter.forward(factors)[age]
+                intensity = self.dmm.emitter.forward(factors)[age]
+                mortality[i] = torch.distributions.Poisson(intensity * exposure[t,age]).sample() / exposure[t,age]
+            mean_mortality[t] = np.mean(mortality)
+            std_mortality[t] = np.std(mortality)
+
+        return (mean_mortality, std_mortality)
+
+    def forecast_mortality(self, age, forecast_length, mc_samples = 1000):
+
+        exposure = self.data[1]
+
+        (level_loc_forecast, level_scale_forecast) = self.forecast_factors(forecast_length)
+
+        mean_mortality_rate = np.empty(forecast_length)
+        std_mortality_rate = np.empty(forecast_length)
+
+        for t in range(forecast_length):
+            mortality = np.empty(mc_samples)
+            for i in range(mc_samples):
+                factors = torch.distributions.Normal(level_loc_forecast[:,t] , level_scale_forecast[:,t]).sample()
+                intensity = self.dmm.emitter.forward(factors)[age]
+
             mean_mortality_rate[t] = np.mean(intensity)
             std_mortality_rate[t] = np.std(intensity)
 
