@@ -14,10 +14,12 @@
 \usepackage{comment}
 \usepackage{natbib}
 \usepackage{color}
-\usepackage{subfig}
+%\usepackage{subfig}
 \usepackage{xcolor}
 \usepackage{relsize}
 \usepackage{accents}
+\usepackage{caption}
+\usepackage{subcaption}
 
 %\usepackage{refcheck}
 \usepackage{mathtools}
@@ -191,9 +193,6 @@ In the numerical illustrations in Section~\ref{sec:results}, the approximate pos
 	\tilde K_{i,t} &= \tilde \mu^K_{i,t} + \beta_{i,t}\tilde K_{i,t-1} + \rho_{i,t}\tilde X_{t-1} + \tilde e^K_{i,t},\quad \tilde e^K_{i,t} \text{ iid } \mathsf N(0,\tilde \sigma^2_{K,i}).
 \end{align}
 
-
-
-
 \section{Forecasting and validation}\label{sec:forecastValidation}
 Here we discuss how to forecast the mortality after maximising the ELBO and thus obtaining estimates of $\varphi$, $\theta$ and, in particular, the joint distribution of $(\tilde X_{i,\bar t},\tilde K_{i,\bar t})$.
 
@@ -236,20 +235,87 @@ We then compare the results from the different model using the log-score.
 
 The model is as in \eqref{eq:deathDist} - \eqref{eq:state_trend} where $f$ is either a 1 (i.e.\ affine) or a 2-layer neural network with ReLU activation and the middle layer is of dimension 100. We compare $d=1,\ldots 6$.
 
-\begin{figure}[hbt]
-\begin{center}
-  \includegraphics[width=0.7\textwidth]{figs/latent_dim_comparison.pdf}
-  \caption{}
-  \end{center}
+\begin{figure}
+    \centering
+    \begin{subfigure}[b]{0.45\textwidth}
+        \centering
+        \includegraphics[width=\textwidth]{figs/latent_dim_comparison.pdf}
+        \caption{Out-of-sample log score against forecast horizon for different number of latent dimensions.}
+    \end{subfigure}
+    \hfill
+    \begin{subfigure}[b]{0.45\textwidth}
+        \centering
+        \includegraphics[width=\textwidth]{figs/latent_dim_comparison_R2.pdf}
+        \caption{Out-of-sample $R^2$ against forecast horizon for different number of latent dimensions.}
+    \end{subfigure}
+    \hfill
+    \begin{subfigure}[b]{0.45\textwidth}
+        \centering
+        \includegraphics[width=\textwidth]{figs/model_comparison.pdf}
+        \caption{Out-of-sample $R^2$ for our model with three latent dimensions compared to the Lee-Carter and Plat model.}
+    \end{subfigure}
+       \caption{Model evaluation when fitted on Swedish male mortality data with the first year from 1920 to 1952. Each model is fitted using 60 years of data and evaluated on the following 10 years. The figures show that three latent dimensions gives the best out-of-sample performance in our model and that our model outperforms the comparison models.}
+       \label{fig:model_evaluation_sweden}
 \end{figure}
-\begin{figure}[hbt]
-\begin{center}
-  \includegraphics[width=0.7\textwidth]{figs/model_comparison.pdf}
-  \caption{}
-  \end{center}
+
+\begin{figure}
+    \centering
+    \begin{subfigure}[b]{0.45\textwidth}
+        \centering
+        \includegraphics[width=\textwidth]{figs/sweden_1952_2011_Male_100_1_3latent_forecast.pdf}
+        \caption{Level of latent process with forecast. Shaded region is $\pm$ 1 standard deviation. From 1950 to 2011 shows smoothed values, from 2012 shows forecast.}
+    \end{subfigure}
+    \hfill
+    \begin{subfigure}[b]{0.45\textwidth}
+        \centering
+        \includegraphics[width=\textwidth]{figs/sweden_1952_2011_Male_100_1_3latent_trend.pdf}
+        \caption{Trend of latent process. Shaded region is $\pm$ 1 standard deviation.}
+    \end{subfigure}
+    \hfill
+    \begin{subfigure}[b]{0.45\textwidth}
+        \centering
+        \includegraphics[width=\textwidth]{figs/sweden_1952_2011_Male_100_1_3loadings.pdf}
+        \caption{Factor loadings}
+    \end{subfigure}
+    \hfill
+    \begin{subfigure}[b]{0.45\textwidth}
+        \centering
+        \includegraphics[width=\textwidth]{figs/sweden_1952_2011_Male_100_1_3rateVsAge.pdf}
+        \caption{$y=5/x$}
+    \end{subfigure}
+       \caption{Illustration of the model fitted to Swedish data from 1952 to 2011 with three latent dimensions.}
+       \label{fig:model_illustration_sweden}
 \end{figure}
 
 
+\begin{figure}
+    \centering
+    \begin{subfigure}[b]{0.45\textwidth}
+        \centering
+        \includegraphics[width=\textwidth]{figs/sweden_1952_2011_Male_100_1_3rateVsTimeAge20.pdf}
+        \caption{20 year olds}
+    \end{subfigure}
+    \hfill
+    \begin{subfigure}[b]{0.45\textwidth}
+        \centering
+        \includegraphics[width=\textwidth]{figs/sweden_1952_2011_Male_100_1_3rateVsTimeAge40.pdf}
+        \caption{40 year olds}
+    \end{subfigure}
+    \hfill
+    \begin{subfigure}[b]{0.45\textwidth}
+        \centering
+        \includegraphics[width=\textwidth]{figs/sweden_1952_2011_Male_100_1_3rateVsTimeAge60.pdf}
+        \caption{60 year olds}
+    \end{subfigure}
+    \hfill
+    \begin{subfigure}[b]{0.45\textwidth}
+        \centering
+        \includegraphics[width=\textwidth]{figs/sweden_1952_2011_Male_100_1_3rateVsTimeAge80.pdf}
+        \caption{80 year olds}
+    \end{subfigure}
+       \caption{Mortality forecasts for four different age groups. Solid line is the smoothed mortality rate, dashed line is the mean forecasted mortality rate and shaded region is $\pm$ 1 standard deviation of the forecasted observed mortality rate.}
+       \label{fig:model_forecast_sweden}
+\end{figure}
 
 
 \section{Conclusions}\label{sec:conclusions}
