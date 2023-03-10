@@ -317,7 +317,24 @@ The model is as in \eqref{eq:deathDist} - \eqref{eq:state_trend} where $f$ is ei
        \label{fig:model_forecast_sweden}
 \end{figure}
 
-
+\begin{table}[h!]
+    \centering
+    \begin{tabular}{l l l} 
+        \hline
+        Model & Log-score & $R^2$ \\  
+        \hline\hline
+        Our & -455.1 & 0.664 \\
+        Lee-Carter & -608.5 & 0.215 \\ 
+        Plat & -474.9 & 0.608 \\
+        \hline
+    \end{tabular}
+    \label{table:model_comparision_sweden}
+    \caption{Out-of-sample model evaluation metrics for Sweden. Numbers are averaged over all forecast horizons and training/evaluations periods.}
+\end{table}
+%         Log score	    naive	    saturated	R2	        relative
+% LC	    -608.482678	    -794.965564	-344.072618	0.215000	1.769242
+% Plat    -474.918951	    -794.965564	-344.072618	0.608068	1.380638
+% VI      -455.137394	    -794.965564	-344.072618	0.663549	1.323074
 \section{Conclusions}\label{sec:conclusions}
 
 \bibliography{biblio}
