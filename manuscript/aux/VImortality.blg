@@ -1,0 +1,49 @@
+This is BibTeX, Version 0.99d (TeX Live 2021)
+Capacity: max_strings=200000, hash_size=200000, hash_prime=170003
+The top-level auxiliary file: aux/VImortality.aux
+The style file: elsarticle-num.bst
+Database file #1: biblio.bib
+Warning--empty journal in andersson2020mortality
+Warning--empty pages in ranganath2014black
+You've used 17 entries,
+            2952 wiz_defined-function locations,
+            776 strings with 8484 characters,
+and the built_in function-call counts, 4969 in all, are:
+= -- 458
+> -- 185
+< -- 1
++ -- 73
+- -- 56
+* -- 334
+:= -- 707
+add.period$ -- 17
+call.type$ -- 17
+change.case$ -- 16
+chr.to.int$ -- 0
+cite$ -- 19
+duplicate$ -- 150
+empty$ -- 551
+format.name$ -- 71
+if$ -- 1264
+int.to.chr$ -- 0
+int.to.str$ -- 17
+missing$ -- 16
+newline$ -- 59
+num.names$ -- 17
+pop$ -- 111
+preamble$ -- 1
+purify$ -- 0
+quote$ -- 0
+skip$ -- 322
+stack$ -- 0
+substring$ -- 278
+swap$ -- 26
+text.length$ -- 1
+text.prefix$ -- 0
+top$ -- 0
+type$ -- 0
+warning$ -- 2
+while$ -- 40
+width$ -- 19
+write$ -- 141
+(There were 2 warnings)
