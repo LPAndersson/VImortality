@@ -34,14 +34,6 @@
 \newlabel{eq:deathDist}{{1}{3}{Model}{equation.2.1}{}}
 \newlabel{eq:state_level}{{2}{3}{Model}{equation.2.2}{}}
 \newlabel{eq:state_trend}{{3}{3}{Model}{equation.2.3}{}}
-\@writefile{tdo}{\contentsline {todo}{When you say ``shallow'', you don't allow for interactions?}{3}{section*.1}\protected@file@percent }
-\pgfsyspdfmark {pgfid1}{10179840}{15722276}
-\pgfsyspdfmark {pgfid4}{34931998}{15737021}
-\pgfsyspdfmark {pgfid5}{36357406}{15468324}
-\@writefile{tdo}{\contentsline {todo}{see previous comment about ``shallow'' networks}{3}{section*.2}\protected@file@percent }
-\pgfsyspdfmark {pgfid6}{28836718}{10970916}
-\pgfsyspdfmark {pgfid9}{34931998}{4654883}
-\pgfsyspdfmark {pgfid10}{36357406}{4386186}
 \@writefile{toc}{\contentsline {section}{\numberline {3}Variational inference}{4}{section.3}\protected@file@percent }
 \newlabel{sec:vi}{{3}{4}{Variational inference}{section.3}{}}
 \newlabel{eq: reparametrisation trick}{{8}{4}{Variational inference}{equation.3.8}{}}
@@ -50,29 +42,41 @@
 \@writefile{toc}{\contentsline {section}{\numberline {4}Forecasting and validation}{5}{section.4}\protected@file@percent }
 \newlabel{sec:forecastValidation}{{4}{5}{Forecasting and validation}{section.4}{}}
 \citation{hmd2018data}
+\citation{plat2009stochastic}
+\@writefile{toc}{\contentsline {section}{\numberline {5}Results}{6}{section.5}\protected@file@percent }
+\newlabel{sec:results}{{5}{6}{Results}{section.5}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {5.1}Sweden}{6}{subsection.5.1}\protected@file@percent }
+\newlabel{seq:results_sweden}{{5.1}{6}{Sweden}{subsection.5.1}{}}
+\providecommand*\caption@xref[2]{\@setref\relax\@undefined{#1}}
+\newlabel{fig:model_evaluation_sweden_logscore}{{1a}{7}{Out-of-sample log score against forecast horizon for different number of latent dimensions.\relax }{figure.caption.1}{}}
+\newlabel{sub@fig:model_evaluation_sweden_logscore}{{a}{7}{Out-of-sample log score against forecast horizon for different number of latent dimensions.\relax }{figure.caption.1}{}}
+\newlabel{fig:model_evaluation_sweden_R2}{{1b}{7}{Out-of-sample $R^2$ against forecast horizon for different number of latent dimensions.\relax }{figure.caption.1}{}}
+\newlabel{sub@fig:model_evaluation_sweden_R2}{{b}{7}{Out-of-sample $R^2$ against forecast horizon for different number of latent dimensions.\relax }{figure.caption.1}{}}
+\newlabel{fig:model_comparison_sweden}{{1c}{7}{Out-of-sample $R^2$ for our model with three latent dimensions compared to the Lee-Carter and Plat model.\relax }{figure.caption.1}{}}
+\newlabel{sub@fig:model_comparison_sweden}{{c}{7}{Out-of-sample $R^2$ for our model with three latent dimensions compared to the Lee-Carter and Plat model.\relax }{figure.caption.1}{}}
+\@writefile{lof}{\contentsline {figure}{\numberline {1}{\ignorespaces Model evaluation when fitted on Swedish male mortality data with the first year from 1920 to 1952. Each model is fitted using 60 years of data and evaluated on the following 10 years. The figures show that three latent dimensions give the best out-of-sample performance in our model and that our model outperforms the comparison models.\relax }}{7}{figure.caption.1}\protected@file@percent }
+\newlabel{fig:model_evaluation_sweden}{{1}{7}{Model evaluation when fitted on Swedish male mortality data with the first year from 1920 to 1952. Each model is fitted using 60 years of data and evaluated on the following 10 years. The figures show that three latent dimensions give the best out-of-sample performance in our model and that our model outperforms the comparison models.\relax }{figure.caption.1}{}}
+\newlabel{fig:mortality_rates_in_sample_fit_sweden}{{2d}{8}{In-sample fit of model mortality rates. Dots are observed rates and solid lines are the fitted model. This model is fitted on data from 1952 to 2011.\relax }{figure.caption.3}{}}
+\newlabel{sub@fig:mortality_rates_in_sample_fit_sweden}{{d}{8}{In-sample fit of model mortality rates. Dots are observed rates and solid lines are the fitted model. This model is fitted on data from 1952 to 2011.\relax }{figure.caption.3}{}}
+\@writefile{lof}{\contentsline {figure}{\numberline {2}{\ignorespaces Illustration of the model fitted to Swedish data from 1952 to 2011 with three latent dimensions.\relax }}{8}{figure.caption.3}\protected@file@percent }
+\newlabel{fig:model_illustration_sweden}{{2}{8}{Illustration of the model fitted to Swedish data from 1952 to 2011 with three latent dimensions.\relax }{figure.caption.3}{}}
+\@writefile{lof}{\contentsline {figure}{\numberline {3}{\ignorespaces Mortality forecasts for four different age groups. Solid line is the smoothed mortality rate, dashed line is the mean forecasted mortality rate and shaded region is $\pm $ 1 standard deviation of the forecasted observed mortality rate. Dots indicate observed mortality rates.\relax }}{9}{figure.caption.4}\protected@file@percent }
+\newlabel{fig:model_forecast_sweden}{{3}{9}{Mortality forecasts for four different age groups. Solid line is the smoothed mortality rate, dashed line is the mean forecasted mortality rate and shaded region is $\pm $ 1 standard deviation of the forecasted observed mortality rate. Dots indicate observed mortality rates.\relax }{figure.caption.4}{}}
 \bibdata{biblio}
 \bibcite{gompertz1825nature}{{1}{}{{}}{{}}}
 \bibcite{lee1992modeling}{{2}{}{{}}{{}}}
 \bibcite{booth2008mortality}{{3}{}{{}}{{}}}
-\@writefile{toc}{\contentsline {section}{\numberline {5}Results}{6}{section.5}\protected@file@percent }
-\newlabel{sec:results}{{5}{6}{Results}{section.5}{}}
-\newlabel{table:model_comparision_sweden}{{\caption@xref {table:model_comparision_sweden}{ on input line 331}}{6}{Results}{table.caption.6}{}}
-\@writefile{lot}{\contentsline {table}{\numberline {1}{\ignorespaces Out-of-sample model evaluation metrics for Sweden. Numbers are averaged over all forecast horizons and training/evaluations periods.\relax }}{6}{table.caption.6}\protected@file@percent }
-\@writefile{toc}{\contentsline {section}{\numberline {6}Conclusions}{6}{section.6}\protected@file@percent }
-\newlabel{sec:conclusions}{{6}{6}{Conclusions}{section.6}{}}
-\@writefile{lof}{\contentsline {figure}{\numberline {1}{\ignorespaces Model evaluation when fitted on Swedish male mortality data with the first year from 1920 to 1952. Each model is fitted using 60 years of data and evaluated on the following 10 years. The figures show that three latent dimensions gives the best out-of-sample performance in our model and that our model outperforms the comparison models.\relax }}{7}{figure.caption.3}\protected@file@percent }
-\providecommand*\caption@xref[2]{\@setref\relax\@undefined{#1}}
-\newlabel{fig:model_evaluation_sweden}{{1}{7}{Model evaluation when fitted on Swedish male mortality data with the first year from 1920 to 1952. Each model is fitted using 60 years of data and evaluated on the following 10 years. The figures show that three latent dimensions gives the best out-of-sample performance in our model and that our model outperforms the comparison models.\relax }{figure.caption.3}{}}
-\@writefile{lof}{\contentsline {figure}{\numberline {2}{\ignorespaces Illustration of the model fitted to Swedish data from 1952 to 2011 with three latent dimensions.\relax }}{8}{figure.caption.4}\protected@file@percent }
-\newlabel{fig:model_illustration_sweden}{{2}{8}{Illustration of the model fitted to Swedish data from 1952 to 2011 with three latent dimensions.\relax }{figure.caption.4}{}}
-\@writefile{lof}{\contentsline {figure}{\numberline {3}{\ignorespaces Mortality forecasts for four different age groups. Solid line is the smoothed mortality rate, dashed line is the mean forecasted mortality rate and shaded region is $\pm $ 1 standard deviation of the forecasted observed mortality rate.\relax }}{9}{figure.caption.5}\protected@file@percent }
-\newlabel{fig:model_forecast_sweden}{{3}{9}{Mortality forecasts for four different age groups. Solid line is the smoothed mortality rate, dashed line is the mean forecasted mortality rate and shaded region is $\pm $ 1 standard deviation of the forecasted observed mortality rate.\relax }{figure.caption.5}{}}
 \bibcite{haberman2011comparative}{{4}{}{{}}{{}}}
 \bibcite{carfora2017quantitative}{{5}{}{{}}{{}}}
 \bibcite{andersson2020mortality}{{6}{}{{}}{{}}}
 \bibcite{brouhns2002poisson}{{7}{}{{}}{{}}}
 \bibcite{de2006extending}{{8}{}{{}}{{}}}
 \bibcite{nguyen2021temporal}{{9}{}{{}}{{}}}
+\@writefile{lot}{\contentsline {table}{\numberline {1}{\ignorespaces Out-of-sample model evaluation metrics for Sweden. Numbers are averaged over all forecast horizons and rolling windows.\relax }}{10}{table.caption.2}\protected@file@percent }
+\newlabel{table:model_comparision_sweden}{{1}{10}{Out-of-sample model evaluation metrics for Sweden. Numbers are averaged over all forecast horizons and rolling windows.\relax }{table.caption.2}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {5.2}USA}{10}{subsection.5.2}\protected@file@percent }
+\@writefile{toc}{\contentsline {section}{\numberline {6}Conclusions}{10}{section.6}\protected@file@percent }
+\newlabel{sec:conclusions}{{6}{10}{Conclusions}{section.6}{}}
 \bibcite{wang2019deep}{{10}{}{{}}{{}}}
 \bibcite{salinas2020deepar}{{11}{}{{}}{{}}}
 \bibcite{rangapuram2018deep}{{12}{}{{}}{{}}}
@@ -81,6 +85,7 @@
 \bibcite{archer2015black}{{15}{}{{}}{{}}}
 \bibcite{gneiting2007strictly}{{16}{}{{}}{{}}}
 \bibcite{hmd2018data}{{17}{}{{}}{{}}}
+\bibcite{plat2009stochastic}{{18}{}{{}}{{}}}
 \providecommand\NAT@force@numbers{}\NAT@force@numbers
 \newlabel{LastPage}{{}{11}{}{page.11}{}}
 \xdef\lastpage@lastpage{11}

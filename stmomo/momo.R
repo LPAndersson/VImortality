@@ -4,16 +4,6 @@ library(demography)
 
 source("log_scores.R")
 
-#Load data
-# SWdata <- hmd.mx(
-#   country = "SWE",
-#   username = 'patrik.andersson@statistics.uu.se',
-#   password = 'zebzib-ruvzuh-qijgU3',
-#   label = "Sweden"
-# )
-#format(Sys.time(), "%d/%M/%Y")
-#format(Sys.time(), "%X")
-
 country <- 'sweden'
 sex <- 'Male'
 nn_layers <- 0

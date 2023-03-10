@@ -14,7 +14,7 @@ param_tuple = ({
     'last_year_test' : 2021,
     'sex' : "Male", # or Female, Both
     'max_age' : 100,
-    'nn_layers' : 1,
+    'nn_layers' : 2,
     'latent_dim' : 3
 },)
 
@@ -31,8 +31,8 @@ def train(param):
 
     model = model.fit(exposure = exposure_train, 
                       deaths = deaths_train, 
-                      num_steps = 1000,# 60000, 
-                      log_freq = 10, 
+                      num_steps = 20000, 
+                      log_freq = 100, 
                       lr = 0.01,
                       checkpoint_freq = 100,
                       lr_decay = 0.9999,

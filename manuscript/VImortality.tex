@@ -120,27 +120,27 @@ Non-linear state-space-models \sep Mortality forecasting \sep Hidden Markov mod
 \linenumbers
 
 \section{Introduction}
-Attempts to forecast mortality goes back perhaps as far as \cite{gompertz1825nature}. A more recent example is the Lee-Carter model \citep{lee1992modeling} and its extensions, see \cite{booth2008mortality, haberman2011comparative, carfora2017quantitative} for a survey. Applications of mortality forecasting can be found in for example demographic predictions and in the insurance industry.
+Attempts to forecast mortality go back perhaps as far as \cite{gompertz1825nature}. A more recent example is the Lee-Carter model \citep{lee1992modeling} and its extensions, see \cite{booth2008mortality, haberman2011comparative, carfora2017quantitative} for a survey. Applications of mortality forecasting can be found in for example demographic predictions and in the insurance industry.
 
-The Lee-Carter model is a log-linear multivariate Gaussian model of mortality rates. A major criticism of Lee-Carter-type models is that the model training is done as a two-step process. In a first step, point estimates of the mortality rates are obtained, for example as the maximum likelihood estimate of a Poisson distribution, and in a second step, a latent process is fitted to these estimates. This method has the advantage that it is simple and fast to implement, but it is inefficient when compared to a simultaneous estimation of all unknown parameters. Also, it is not possible to distinguish between the finite population noise of the mortality estimates and the noise from the latent process. Both of these issues can potentially affect the quality of the forecasts. 
+The Lee-Carter model is a log-linear multivariate Gaussian model of mortality rates. A major criticism of Lee-Carter-type models is that the model training is done as a two-step process. In the first step, point estimates of the mortality rates are obtained, for example as the maximum likelihood estimate of a Poisson distribution, and in the second step, a latent process is fitted to these estimates. This method has the advantage that it is simple and fast to implement, but it is inefficient when compared to simultaneous estimation of all unknown parameters. Also, it is not possible to distinguish between the finite population noise of the mortality estimates and the noise from the latent process. Both of these issues can potentially affect the quality of the forecasts. 
 
-Simultaneous estimation of parameters have been considered in \cite{andersson2020mortality} where particle filtering methods are used for a Poisson Lee-Carter model similar to \cite{brouhns2002poisson}. However, this method has its drawbacks. It could be considered cumbersome for practitioners as it requires custom implementation and tuning, and since the particle filter methods are computationally expensive, the number of parameters must not be too large. The complexity of the modelling, is of course, reduced when removing the Poisson assumption, see e.g.\ \cite{de2006extending} for a simpler state-space model treatment of a standard Gaussian Lee-Carter model.
+Simultaneous estimation of parameters has been considered in \cite{andersson2020mortality} where particle filtering methods are used for a Poisson Lee-Carter model similar to \cite{brouhns2002poisson}. However, this method has its drawbacks. It could be considered cumbersome for practitioners as it requires custom implementation and tuning, and since the particle filter methods are computationally expensive, the number of parameters must not be too large. The complexity of the modelling, is, of course, reduced when removing the Poisson assumption, see e.g.\ \cite{de2006extending} for a simpler state-space model treatment of a standard Gaussian Lee-Carter model.
 
-\lpa{Recently it has been suggested to use models from deep learning, sometimes called deep factor models, to forecast high-dimensional multivariate time series. Some examples of this can be found in \cite{nguyen2021temporal, wang2019deep, salinas2020deepar, rangapuram2018deep}. The applications presented in those articles differ from mortality forecasting in the scale of the problem. In mortality forecasting the dimension of the time series is about 100 (the lifetime in years of a human) and the number of observations of time series is also about 100 (although some countries do have reliable data for longer than that). As a consequence, to avoid overfitting, we need to consider simpler models. This includes shallower networks for mapping latent variables to the observed time series, linear Gaussian models instead of RNNs for propagating the latent variables forward in time and fewer latent factors.}
+Recently it has been suggested to use models from deep learning, sometimes called deep factor models, to forecast high-dimensional multivariate time series. Some examples of this can be found in \cite{nguyen2021temporal, wang2019deep, salinas2020deepar, rangapuram2018deep}. The applications presented in those articles differ from mortality forecasting in the scale of the problem. In mortality forecasting, the dimension of the time series is about 100 (the lifetime in years of a human) and the number of observations of time series is also about 100 (although some countries do have reliable data for longer than that). As a consequence, to avoid overfitting, we need to consider simpler models. This includes shallower networks for mapping latent variables to the observed time series, linear Gaussian models instead of RNNs for propagating the latent variables forward in time and fewer latent factors.
 
-\lpa{Compared to previous mortality forecasting models, the novelty of this paper is therefore} to use black-box \ml{variational inference (?) (VI)} \citep{ranganath2014black} to solve the inference problem. This means that after specifying how to sample from the model and the approximate posterior, the inference is done automatically without any model specific customisation. The family of models that can be handled is also expanded. For example one can consider neural networks for mapping the latent process to mortality rates. Also, in this case all the parameters can be estimated simultaneously. This latter point is problematic when using particle filter techniques, where it is necessary to estimate the linear mapping from the latent process to the mortality rates in isolation before continuing with the estimation of the other parameters.
+Compared to previous mortality forecasting models, the novelty of this paper is therefore to use black-box variational inference (VI) \citep{ranganath2014black} to solve the inference problem. This means that after specifying how to sample from the model and the approximate posterior, the inference is done automatically without any model-specific customisation. The family of models that can be handled is also expanded. For example, one can consider neural networks for mapping the latent process to mortality rates. Also, in this case, all the parameters can be estimated simultaneously. This latter point is problematic when using particle filter techniques, where it is necessary to estimate the linear mapping from the latent process to the mortality rates in isolation before continuing with the estimation of the other parameters.
 
 Other approaches that use machine learning techniques for forecasting mortality rates can be found in e.g.\ \ml{[W{\"u}thrich \& co]} that consider various types of Gaussian recurrent neural network structures, \ml{[Italienarna, Lindholm \& Palmborg]} that consider univariate LSTM NNs, both with and without a Poisson population assumption, and see \ml{[xx]} that consider tree-based techniques.
 
-The model is implemented using the probabilistic programming language Pyro \citep{bingham2018pyro} and the code is available on Github\ml{, see [reference]}.
+The model is implemented using the probabilistic programming language Pyro \citep{bingham2018pyro} and the code is available on Github\lpa{, see [reference]}.
 
 The rest of the paper is organised as follows: In Section \ref{sec:model} we describe the probabilistic model that will be used for forecasting. In Section \ref{sec:vi} we give a brief introduction to variational inference and in Section \ref{sec:forecastValidation} we describe how to forecast the mortality once the model has been trained and how we validate the forecast. In Section \ref{sec:results} we demonstrate our method on a few examples. Section \ref{sec:conclusions} concludes the paper.
 
 
 \section{Model}\label{sec:model}
-In this section we describe the probabilistic model that define the mortality dynamics. Uppercase letters will denote random variables and lowercase letters the corresponding observed value. Greek letters will denote unknown parameters that are to be estimated. 
+In this section, we describe the probabilistic model that defines the mortality dynamics. Uppercase letters will denote random variables and lowercase letters the corresponding observed value. Greek letters will denote unknown parameters that are to be estimated. 
 
-Mortality data can be aggregated in different forms and clearly the choice of model will have to be adjusted accordingly. For example, the data could contain the population size of each age group at the beginning of the year and the number of deaths during the year. In this case a binomial model seems natural. We however consider data on the yearly number of deaths and the \emph{exposure to risk} in each age group. The exposure to risk in this setting is the total time that the individuals in the population were a certain age in a certain year.  The number of deaths in age $a\in \cur{0,1,\ldots, \bar a}$, year $t\in \cur{0,1,\ldots, \bar t}$ is denoted by $D_{a,t}$ and the exposure by $E_{a,t}$. 
+Mortality data can be aggregated in different forms and clearly the choice of model will have to be adjusted accordingly. For example, the data could contain the population size of each age group at the beginning of the year and the number of deaths during the year. In this case, a binomial model seems natural. We however consider data on the yearly number of deaths and the \emph{exposure to risk} in each age group. The exposure to risk in this setting is the total time that the individuals in the population were a certain age in a certain year.  The number of deaths in age $a\in \cur{0,1,\ldots, \bar a}$, year $t\in \cur{0,1,\ldots, \bar t}$ is denoted by $D_{a,t}$ and the exposure by $E_{a,t}$. 
 
 Our model is a dynamic factor model that can be written as:
 \begin{align}
@@ -148,9 +148,9 @@ Our model is a dynamic factor model that can be written as:
 	& X_{i,t} =X_{i,t-1} + K_{i,t-1} + U_{i,t},\quad U_{i,t} \text{ iid }  \mathsf{N}(0,\sigma^2_{X,i}),\label{eq:state_level}\\
 	& K_{i,t} = \mu_i + \varphi_i(K_{i,t-1} - \mu_i) + V_{i,t},\quad V_{i,t} \text{ iid }   \mathsf{N}(0,\sigma^2_{K,i}).\label{eq:state_trend}
 \end{align}
-Here $i=1,2,\ldots , d$, where $d$ is the dimension of the latent variables. We also require $0\leq \varphi_i \leq 1$. The function $f^\psi_a$ is the $a$:th component of $f^\psi:\mathbb R^d \to \mathbb R^{\bar a+1}$. In our examples in Section~\ref{sec:results} $f$ will be given by a shallow neural network.\todo{When you say ``shallow'', you don't allow for interactions?}
+Here $i=1,2,\ldots , d$, where $d$ is the dimension of the latent variables. We also require $0\leq \varphi_i \leq 1$. The function $f^\psi_a$ is the $a$:th component of $f^\psi:\mathbb R^d \to \mathbb R^{\bar a+1}$. In our examples in Section~\ref{sec:results} $f$ will be given by a shallow neural network.
 
-We remark here that the exact specification of the above model is not critical for the continuation. For example, the exponential link-function in the Poisson-distribution could be changed to some other positive differentiable function without complication. We are assuming that the components of the latent process are independent, instead letting any dependence \todo{see previous comment about ``shallow'' networks} be captured by $f$. However this latent process could be replaced with some other Markov process.
+We remark here that the exact specification of the above model is not critical for the continuation. For example, the exponential link-function in the Poisson distribution could be changed to some other positive differentiable function without complication. We are assuming that the components of the latent process are independent, instead letting any dependence be captured by $f$. However, this latent process could be replaced with some other Markov process.
 
 \section{Variational inference}\label{sec:vi}
 Here we explain the main ideas of variational inference (VI) in a general setting. At the end of the section, we connect this to our specific model. For more on VI in general we refer to \cite{ranganath2014black} and for the application to state space models, see \cite{archer2015black}.
@@ -169,7 +169,7 @@ Consider a parametrised distribution, the approximate posterior, $q_\theta(x)$. 
 	l(\psi):=&\log L(\psi) = \log \int \frac{p_\psi(y,x)}{q_\theta(x)} q_\theta(x)\dd x  \\
     \geq &\int \pa{\log p_\psi(y,x) - \log q_\theta(x)}q_\theta(x)\dd x=:\mathcal L(\psi,\theta).
 \end{align*}
-The right-hand side is known as the evidence lower bound (ELBO). The idea of VI is to instead of maximising the log-likelihood, maximise the ELBO. Towards this we calculate the gradients
+The right-hand side is known as the evidence lower bound (ELBO). The idea of VI is to instead of maximising the log-likelihood, maximise the ELBO. Towards this, we calculate the gradients
 \begin{align}
 	\partial_\psi \mathcal L(\varphi,\theta) &= \int \partial_\psi \log p_\psi(y,x)q_\theta(x) \dd x ,\\
 	\partial_\theta \mathcal L(\psi,\theta) &=  \int (\log p_\psi(y,x) - \log q_\theta(x))\partial_\theta \log q_\theta(x)  q_\theta(x)   \dd x.
@@ -223,71 +223,89 @@ If one wants to forecast the actual number of deaths, a forecast of the number o
 The forecast is validated by calculating the logarithmic score of the forecast on the validation data set, see for example \cite{gneiting2007strictly}. That is, the mortality rates are forecasted and multiplied by the observed exposure-to-risk in each age group, giving the intensity of the Poisson distributed number of deaths in each age group. The logarithmic score of each age group is summed to give the total logarithmic score for a given year.
 
 \section{Results}\label{sec:results}
-First choose a model, then illustrate...
 
-
-In this section we illustrate the results by fitting the model using two datasets, Swedish males between the years 1920 and 2000, and US males between 19xx and 2000. We then forecast from 2001 to 2021. Both datasets are collected from \cite{hmd2018data}.
-
-We then compare the results from the different model using the log-score.
+In this section, we illustrate the performance of the model by fitting it using two datasets on the mortality of Swedish and American males. Both datasets are collected from \cite{hmd2018data}. We evaluate the models using a rolling window; using 60 years to fit the model and 10 years to evaluate the forecast against the actual outcome. The training and evaluation windows are then rolled forward one year and the process repeats. For comparison, we also fit the Lee-Carter and the model by Plat \citep{plat2009stochastic}.
 
 
 
-
-The model is as in \eqref{eq:deathDist} - \eqref{eq:state_trend} where $f$ is either a 1 (i.e.\ affine) or a 2-layer neural network with ReLU activation and the middle layer is of dimension 100. We compare $d=1,\ldots 6$.
-
+The model is as in \eqref{eq:deathDist} - \eqref{eq:state_trend} where $f$ is either a 1 (i.e.\ affine) or a 2-layer neural network with ReLU activation and the middle layer is of dimension 100.
+\subsection{Sweden}\label{seq:results_sweden}
+For model selection, we compare the out-of-sample log-score for varying dimensions of the latent process. In Figure \ref{fig:model_evaluation_sweden_logscore} and \ref{fig:model_evaluation_sweden_R2} we see that dimension 3 overall performs best. We have performed experiments also for dimensions 1 and 2, but the performance was considerably worse, and they are therefore excluded from the picture. In Figure \ref{fig:model_comparison_sweden} we compare the $R^2$ metric of our model with that of Lee-Carter and Plat. We see that the Lee-Carter model is not competitive, while the model by Plat is slightly worse than ours.
 \begin{figure}
     \centering
     \begin{subfigure}[b]{0.45\textwidth}
         \centering
         \includegraphics[width=\textwidth]{figs/latent_dim_comparison.pdf}
         \caption{Out-of-sample log score against forecast horizon for different number of latent dimensions.}
+        \label{fig:model_evaluation_sweden_logscore}
     \end{subfigure}
     \hfill
     \begin{subfigure}[b]{0.45\textwidth}
         \centering
         \includegraphics[width=\textwidth]{figs/latent_dim_comparison_R2.pdf}
         \caption{Out-of-sample $R^2$ against forecast horizon for different number of latent dimensions.}
+        \label{fig:model_evaluation_sweden_R2}
     \end{subfigure}
     \hfill
     \begin{subfigure}[b]{0.45\textwidth}
         \centering
         \includegraphics[width=\textwidth]{figs/model_comparison.pdf}
         \caption{Out-of-sample $R^2$ for our model with three latent dimensions compared to the Lee-Carter and Plat model.}
+        \label{fig:model_comparison_sweden}
     \end{subfigure}
-       \caption{Model evaluation when fitted on Swedish male mortality data with the first year from 1920 to 1952. Each model is fitted using 60 years of data and evaluated on the following 10 years. The figures show that three latent dimensions gives the best out-of-sample performance in our model and that our model outperforms the comparison models.}
+       \caption{Model evaluation when fitted on Swedish male mortality data with the first year from 1920 to 1952. Each model is fitted using 60 years of data and evaluated on the following 10 years. The figures show that three latent dimensions give the best out-of-sample performance in our model and that our model outperforms the comparison models.}
        \label{fig:model_evaluation_sweden}
 \end{figure}
-
-\begin{figure}
+The model performance is summarized in Table \ref{table:model_comparision_sweden} where the log-score and $R^2$ are shown for each model, averaged over all the forecast horizons and rolling windows.
+\begin{table}[h!]
     \centering
-    \begin{subfigure}[b]{0.45\textwidth}
+    \begin{tabular}{l l l} 
+        \hline
+        Model & Log-score & $R^2$ \\  
+        \hline\hline
+        Our & -455.1 & 0.664 \\
+        Lee-Carter & -608.5 & 0.215 \\ 
+        Plat & -474.9 & 0.608 \\
+        \hline
+    \end{tabular}
+    \caption{Out-of-sample model evaluation metrics for Sweden. Numbers are averaged over all forecast horizons and rolling windows.}
+    \label{table:model_comparision_sweden}
+\end{table}
+%         Log score	    naive	    saturated	R2	        relative
+% LC	    -608.482678	    -794.965564	-344.072618	0.215000	1.769242
+% Plat    -474.918951	    -794.965564	-344.072618	0.608068	1.380638
+% VI      -455.137394	    -794.965564	-344.072618	0.663549	1.323074
+Figure \ref{fig:model_illustration_sweden} illustrates the fitted model. In particular, we note that the in-sample fit of the mortality rates in \ref{fig:mortality_rates_in_sample_fit_sweden} are quite good.
+\begin{figure}
+    \centering    \begin{subfigure}[b]{0.45\textwidth}
         \centering
         \includegraphics[width=\textwidth]{figs/sweden_1952_2011_Male_100_1_3latent_forecast.pdf}
-        \caption{Level of latent process with forecast. Shaded region is $\pm$ 1 standard deviation. From 1950 to 2011 shows smoothed values, from 2012 shows forecast.}
+        \caption{Level of latent process in-sample and its forecast. Shaded region is $\pm$ 1 standard deviation. From 1950 to 2011 shows smoothed values, from 2012 shows forecast.}
     \end{subfigure}
     \hfill
     \begin{subfigure}[b]{0.45\textwidth}
         \centering
         \includegraphics[width=\textwidth]{figs/sweden_1952_2011_Male_100_1_3latent_trend.pdf}
-        \caption{Trend of latent process. Shaded region is $\pm$ 1 standard deviation.}
+        \caption{Trend of latent process. The shaded region is $\pm$ 1 standard deviation.}
     \end{subfigure}
     \hfill
     \begin{subfigure}[b]{0.45\textwidth}
         \centering
         \includegraphics[width=\textwidth]{figs/sweden_1952_2011_Male_100_1_3loadings.pdf}
-        \caption{Factor loadings}
+        \caption{Factor loadings for the model with 3 latent dimensions}
     \end{subfigure}
     \hfill
     \begin{subfigure}[b]{0.45\textwidth}
         \centering
         \includegraphics[width=\textwidth]{figs/sweden_1952_2011_Male_100_1_3rateVsAge.pdf}
-        \caption{$y=5/x$}
+        \caption{In-sample fit of model mortality rates. Dots are observed rates and solid lines are the fitted model. This model is fitted on data from 1952 to 2011.}
+        \label{fig:mortality_rates_in_sample_fit_sweden}
     \end{subfigure}
-       \caption{Illustration of the model fitted to Swedish data from 1952 to 2011 with three latent dimensions.}
-       \label{fig:model_illustration_sweden}
+ 
+    \caption{Illustration of the model fitted to Swedish data from 1952 to 2011 with three latent dimensions.}
+    \label{fig:model_illustration_sweden}
 \end{figure}
-
-
+Figure \ref{fig:model_forecast_sweden} shows the smoothed mortality rates and forecasted for four age groups from 2012 to 2023. The shaded regions represent $\pm$ 1 standard deviation and the grey dots are the observed mortality rates. That is, we should expect that around 7 out of 10 observations are within the shaded region. The pictures seem to confirm this.  
 \begin{figure}
     \centering
     \begin{subfigure}[b]{0.45\textwidth}
@@ -313,28 +331,14 @@ The model is as in \eqref{eq:deathDist} - \eqref{eq:state_trend} where $f$ is ei
         \includegraphics[width=\textwidth]{figs/sweden_1952_2011_Male_100_1_3rateVsTimeAge80.pdf}
         \caption{80 year olds}
     \end{subfigure}
-       \caption{Mortality forecasts for four different age groups. Solid line is the smoothed mortality rate, dashed line is the mean forecasted mortality rate and shaded region is $\pm$ 1 standard deviation of the forecasted observed mortality rate.}
+       \caption{Mortality forecasts for four different age groups. Solid line is the smoothed mortality rate, dashed line is the mean forecasted mortality rate and shaded region is $\pm$ 1 standard deviation of the forecasted observed mortality rate. Dots indicate observed mortality rates.}
        \label{fig:model_forecast_sweden}
 \end{figure}
 
-\begin{table}[h!]
-    \centering
-    \begin{tabular}{l l l} 
-        \hline
-        Model & Log-score & $R^2$ \\  
-        \hline\hline
-        Our & -455.1 & 0.664 \\
-        Lee-Carter & -608.5 & 0.215 \\ 
-        Plat & -474.9 & 0.608 \\
-        \hline
-    \end{tabular}
-    \label{table:model_comparision_sweden}
-    \caption{Out-of-sample model evaluation metrics for Sweden. Numbers are averaged over all forecast horizons and training/evaluations periods.}
-\end{table}
-%         Log score	    naive	    saturated	R2	        relative
-% LC	    -608.482678	    -794.965564	-344.072618	0.215000	1.769242
-% Plat    -474.918951	    -794.965564	-344.072618	0.608068	1.380638
-% VI      -455.137394	    -794.965564	-344.072618	0.663549	1.323074
+\subsection{USA}
+
+
+
 \section{Conclusions}\label{sec:conclusions}
 
 \bibliography{biblio}
