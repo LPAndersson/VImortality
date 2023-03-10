@@ -16,17 +16,17 @@ from itertools import product
 from itertools import cycle
 import psutil 
 
-first_year = 1920
+first_year = 1933
 train_length = 60
 forecast_length = 10
-last_year = 2021
+last_year = 2020
 
 param_tuple = tuple()
 
 start_years = range(first_year, last_year - train_length - forecast_length + 2)
-countries = [data_loader.SWEDEN]
+countries = [data_loader.USA]
 nn_layers = [1]
-latent_dims = [1,2,3,4,5,6,7,8,9]
+latent_dims = [3,4,5,6,7]
 
 for start_year, country, nn_layer, latent_dim in product(start_years, countries, nn_layers, latent_dims):
     param_tuple = param_tuple + ({
@@ -53,9 +53,9 @@ def train(param):
 
     model = mf.Mortality(param)
 
-    file_name = "trained_models/%s_%d_%d_%s_%d_%d_%d" %(param['country'].name, param['first_year_train'], param['last_year_train'], param['sex'], param['max_age'], param['nn_layers'], param['latent_dim'])
+    file_name = "../trainedModels/%s_%d_%d_%s_%d_%d_%d" %(param['country'].name, param['first_year_train'], param['last_year_train'], param['sex'], param['max_age'], param['nn_layers'], param['latent_dim'])
 
-    model = model.fit(exposure = exposure_train, deaths = deaths_train, num_steps = 20000, log_freq = 1000, checkpoint_freq = 1000, save_file = file_name)
+    model = model.fit(exposure = exposure_train, deaths = deaths_train, num_steps = 1000, log_freq = 1000, checkpoint_freq = 1000, save_file = file_name)
 
     log_score = model.log_score(exposure_test, deaths_test, mc_samples = 10000)
 
@@ -79,7 +79,7 @@ def train(param):
                   columns = ['Country', 'first_year_train', 'last_year_train', 'Sex','max_age', 'nn_layers', 'latent_dim', 'Forecast horizon', 'Log score', 'Date', 'Time'])
 
 
-    out_path = 'results-230126' + '.csv'
+    out_path = '../trainedModels/results/results-230310' + '.csv'
     
     l.acquire()
     try:
