@@ -15,7 +15,7 @@ param_tuple = ({
     'sex' : "Male", # or Female, Both
     'max_age' : 100,
     'nn_layers' : 2,
-    'latent_dim' : 3
+    'latent_dim' : 2
 },)
 
 
