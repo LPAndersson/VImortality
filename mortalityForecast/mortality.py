@@ -247,7 +247,7 @@ class Mortality:
         epsilon = 0.01
 
         #Bias term
-        out = [self.dmm.emitter.forward(torch.zeros(self.dmm.latent_dim)).detach()]
+        out = [torch.log(self.dmm.emitter.forward(torch.zeros(self.dmm.latent_dim)).detach())]
 
         for i in range(self.dmm.latent_dim):
             z = torch.zeros(self.dmm.latent_dim)

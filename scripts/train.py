@@ -14,8 +14,8 @@ param_tuple = ({
     'last_year_test' : 2021,
     'sex' : "Male", # or Female, Both
     'max_age' : 100,
-    'nn_layers' : 2,
-    'latent_dim' : 2
+    'nn_layers' : 1,
+    'latent_dim' : 5
 },)
 
 
