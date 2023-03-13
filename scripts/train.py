@@ -14,8 +14,13 @@ param_tuple = ({
     'last_year_test' : 2021,
     'sex' : "Male", # or Female, Both
     'max_age' : 100,
-    'nn_layers' : 1,
-    'latent_dim' : 5
+    'model' : 'radial_basis',
+    'num_basis' : 20,
+    'tau' : 10,
+    'latent_dim' : 4
+    # 'model' : 'linear',
+    # 'nn_layers' : 1,
+    # 'latent_dim' : 5
 },)
 
 
@@ -27,15 +32,20 @@ def train(param):
 
     model = mf.Mortality(param)
 
-    file_name = "../trainedModels/test_%s_%d_%d_%s_%d_%d_%d" %(param['country'].name, param['first_year_train'], param['last_year_train'], param['sex'], param['max_age'], param['nn_layers'], param['latent_dim'])
-
+    if param['model'] == 'linear':
+        model_string = "%s_%s_%d_%d_%s_%d_%d_%d" %(param['country'].name, 'linear', param['first_year_train'], param['last_year_train'], param['sex'], param['max_age'], param['nn_layers'], param['latent_dim'])
+        file_name = "../trainedModelsLinear/test_" + model_string
+    elif param['model'] == 'radial_basis':
+        model_string = "%s_%s_%d_%d_%s_%d_%d_%d" %(param['country'].name, 'radial_basis', param['first_year_train'], param['last_year_train'], param['sex'], param['max_age'], param['num_basis'], param['latent_dim'])
+        file_name = "../trainedModelsRadial/test_" + model_string
+    
     model = model.fit(exposure = exposure_train, 
                       deaths = deaths_train, 
-                      num_steps = 20000, 
+                      num_steps = 5000, 
                       log_freq = 100, 
                       lr = 0.01,
                       checkpoint_freq = 100,
-                      lr_decay = 0.9999,
+                      lr_decay = 1.0,
                       save_file = file_name)
 
 

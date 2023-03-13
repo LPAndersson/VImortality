@@ -24,8 +24,25 @@ class Mortality:
 
     def __init__(self, param):
 
-        self.emitter = Emitter(input_dim = param['max_age'] + 1, latent_dim = param['latent_dim'], nn_layers = param['nn_layers'])
-        
+        if param['model'] == 'linear':
+            self.emitter = Emitter(
+                input_dim = param['max_age'] + 1, 
+                param = None,
+                model_type = 'radial_basis', 
+                latent_dim = param['latent_dim']
+                )
+        elif param['model'] == 'radial_basis':
+            p ={
+                "num_basis" : param['num_basis'], 
+                "tau" : param['tau'],
+                }
+            self.emitter = Emitter(
+                input_dim = param['max_age'] + 1, 
+                param = p,
+                model_type = 'radial_basis', 
+                latent_dim = param['latent_dim']
+                )
+
         self.latent_transition = LevelTrend(latent_dim = param['latent_dim'])
 
         self.latent_dim = param['latent_dim']
@@ -98,9 +115,7 @@ class Mortality:
 
         return self
 
-    def load(self, file_name, param, exposure, deaths):
-
-        self.param = param
+    def load(self, file_name, exposure, deaths):
 
         self.num_ages = exposure.shape[1]
         self.num_years = exposure.shape[0]
