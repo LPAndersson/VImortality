@@ -233,6 +233,7 @@ In this section, we illustrate the performance of the model by fitting it using 
 The model is as in \eqref{eq:deathDist} - \eqref{eq:state_trend} where $f$ is either affine or a sum of radial basis functions. We begin by selecting hyperparameters for each model, e.g.\ dimension of the affine transformation or the number of radial bases. We then illustrate the fitted model and the out-of-sample forecasting performance. Finally, we compare our model with some alternatives.
 
 \subsection{Affine}\label{seq:results_sweden}
+
 For model selection, we compare the out-of-sample log-score for varying dimensions of the latent process. In Figure \ref{fig:model_evaluation_sweden_logscore} and \ref{fig:model_evaluation_sweden_R2} we see that dimension 3 overall performs best. We have performed experiments also for dimensions 1 and 2, but the performance was considerably worse, and they are therefore excluded from the picture. In Figure \ref{fig:model_comparison_sweden} we compare the $R^2$ metric of our model with that of Lee-Carter and Plat. We see that the Lee-Carter model is not competitive, while the model by Plat is slightly worse than ours.
 \begin{figure}
     \centering
@@ -320,6 +321,9 @@ Figure \ref{fig:model_forecast_sweden} shows the smoothed mortality rates and fo
 \end{figure}
 
 \subsection{Radial basis functions}
+
+This section follows the same pattern as the previous. We choose hyperparameters for the radial basis functions and illustrate the fitted model.
+
 
 \subsection{Comparison}
 The model performance is summarized in Table \ref{table:model_comparision_sweden} where the log-score and $R^2$ are shown for each model, averaged over all the forecast horizons and rolling windows.

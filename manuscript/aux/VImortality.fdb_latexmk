@@ -1,13 +1,13 @@
 # Fdb version 3
-["bibtex aux/VImortality"] 1679411392 "aux/VImortality.aux" "aux/VImortality.bbl" "aux/VImortality" 1679411394
+["bibtex aux/VImortality"] 1679411572 "aux/VImortality.aux" "aux/VImortality.bbl" "aux/VImortality" 1679411574
   "/usr/local/texlive/2022/texmf-dist/bibtex/bst/elsarticle/elsarticle-num.bst" 1606256092 29462 43db4fe246825ec69ed81b2463c17f04 ""
-  "aux/VImortality.aux" 1679411394 7935 4e37d439e28779128125ea68dbb70dab "pdflatex"
+  "aux/VImortality.aux" 1679411573 7935 2feade5e28a5c5bfe4aa3130ed4332fd "pdflatex"
   "biblio.bib" 1679405077 12291 b6e83143c97c6a0e462ba345123238ac ""
   (generated)
   "aux/VImortality.bbl"
   "aux/VImortality.blg"
-["pdflatex"] 1679411393 "/Users/patrik/Desktop/VImortality/manuscript/VImortality.tex" "aux/VImortality.pdf" "VImortality" 1679411394
-  "/Users/patrik/Desktop/VImortality/manuscript/VImortality.tex" 1679411388 22988 7363569fe826b6b3daf073b3ea5f4e19 ""
+["pdflatex"] 1679411572 "/Users/patrik/Desktop/VImortality/manuscript/VImortality.tex" "aux/VImortality.pdf" "VImortality" 1679411574
+  "/Users/patrik/Desktop/VImortality/manuscript/VImortality.tex" 1679411569 23136 4453e839243c2f4b19a2ef989a85b21f ""
   "/usr/local/texlive/2022/texmf-dist/fonts/map/fontname/texfonts.map" 1577235249 3524 cb3e574dea2d1052e39280babc910dc8 ""
   "/usr/local/texlive/2022/texmf-dist/fonts/tfm/jknappen/ec/ectt1000.tfm" 1136768653 1536 06717a2b50de47d4087ac0e6cd759455 ""
   "/usr/local/texlive/2022/texmf-dist/fonts/tfm/public/amsfonts/cmextra/cmbsy5.tfm" 1246382020 1120 1e8878807317373affa7f7bba4cf2f6a ""
@@ -224,10 +224,10 @@
   "/usr/local/texlive/2022/texmf-var/fonts/map/pdftex/updmap/pdftex.map" 1647878959 4410336 7d30a02e9fa9a16d7d1f8d037ba69641 ""
   "/usr/local/texlive/2022/texmf-var/web2c/pdftex/pdflatex.fmt" 1670206496 2826441 e27308ecd06e06d3d0ae02cb5d70b126 ""
   "/usr/local/texlive/2022/texmf.cnf" 1647878952 577 209b46be99c9075fd74d4c0369380e8c ""
-  "VImortality.tex" 1679411388 22988 7363569fe826b6b3daf073b3ea5f4e19 ""
-  "aux/VImortality.aux" 1679411394 7935 4e37d439e28779128125ea68dbb70dab "pdflatex"
-  "aux/VImortality.bbl" 1679411393 3879 765d1d11467a99be3221ec966affd6b8 "bibtex aux/VImortality"
-  "aux/VImortality.out" 1679411394 1044 647a4f565f69372b00a891f8433fb1d3 "pdflatex"
+  "VImortality.tex" 1679411569 23136 4453e839243c2f4b19a2ef989a85b21f ""
+  "aux/VImortality.aux" 1679411573 7935 2feade5e28a5c5bfe4aa3130ed4332fd "pdflatex"
+  "aux/VImortality.bbl" 1679411572 3879 765d1d11467a99be3221ec966affd6b8 "bibtex aux/VImortality"
+  "aux/VImortality.out" 1679411573 1044 647a4f565f69372b00a891f8433fb1d3 "pdflatex"
   "aux/VImortality.spl" 0 -1 0 "pdflatex"
   "figs/latent_dim_comparison.pdf" 1679405077 15137 2c11500a62f53e3c2a10dfb82013959c ""
   "figs/latent_dim_comparison_R2.pdf" 1679405077 16152 194a478f2113f3346d826c8bde7d39a2 ""
