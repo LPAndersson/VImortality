@@ -1,13 +1,13 @@
 # Fdb version 3
-["bibtex aux/VImortality"] 1679410589 "aux/VImortality.aux" "aux/VImortality.bbl" "aux/VImortality" 1679410591
+["bibtex aux/VImortality"] 1679411392 "aux/VImortality.aux" "aux/VImortality.bbl" "aux/VImortality" 1679411394
   "/usr/local/texlive/2022/texmf-dist/bibtex/bst/elsarticle/elsarticle-num.bst" 1606256092 29462 43db4fe246825ec69ed81b2463c17f04 ""
-  "aux/VImortality.aux" 1679410591 7800 b9a8f4276c4c4517f87e8f15e67b1260 "pdflatex"
+  "aux/VImortality.aux" 1679411394 7935 4e37d439e28779128125ea68dbb70dab "pdflatex"
   "biblio.bib" 1679405077 12291 b6e83143c97c6a0e462ba345123238ac ""
   (generated)
   "aux/VImortality.bbl"
   "aux/VImortality.blg"
-["pdflatex"] 1679410589 "/Users/patrik/Desktop/VImortality/manuscript/VImortality.tex" "aux/VImortality.pdf" "VImortality" 1679410591
-  "/Users/patrik/Desktop/VImortality/manuscript/VImortality.tex" 1679410585 22439 335b015a328b41989750e93fad928cd8 ""
+["pdflatex"] 1679411393 "/Users/patrik/Desktop/VImortality/manuscript/VImortality.tex" "aux/VImortality.pdf" "VImortality" 1679411394
+  "/Users/patrik/Desktop/VImortality/manuscript/VImortality.tex" 1679411388 22988 7363569fe826b6b3daf073b3ea5f4e19 ""
   "/usr/local/texlive/2022/texmf-dist/fonts/map/fontname/texfonts.map" 1577235249 3524 cb3e574dea2d1052e39280babc910dc8 ""
   "/usr/local/texlive/2022/texmf-dist/fonts/tfm/jknappen/ec/ectt1000.tfm" 1136768653 1536 06717a2b50de47d4087ac0e6cd759455 ""
   "/usr/local/texlive/2022/texmf-dist/fonts/tfm/public/amsfonts/cmextra/cmbsy5.tfm" 1246382020 1120 1e8878807317373affa7f7bba4cf2f6a ""
@@ -57,6 +57,7 @@
   "/usr/local/texlive/2022/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx12.pfb" 1248133631 32080 340ef9bf63678554ee606688e7b5339d ""
   "/usr/local/texlive/2022/texmf-dist/fonts/type1/public/amsfonts/cm/cmex10.pfb" 1248133631 30251 6afa5cb1d0204815a708a080681d4674 ""
   "/usr/local/texlive/2022/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi12.pfb" 1248133631 36741 fa121aac0049305630cf160b86157ee4 ""
+  "/usr/local/texlive/2022/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi6.pfb" 1248133631 37166 8ab3487cbe3ab49ebce74c29ea2418db ""
   "/usr/local/texlive/2022/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi8.pfb" 1248133631 35469 70d41d2b9ea31d5d813066df7c99281c ""
   "/usr/local/texlive/2022/texmf-dist/fonts/type1/public/amsfonts/cm/cmr10.pfb" 1248133631 35752 024fb6c41858982481f6968b5fc26508 ""
   "/usr/local/texlive/2022/texmf-dist/fonts/type1/public/amsfonts/cm/cmr12.pfb" 1248133631 32722 d7379af29a190c3f453aba36302ff5a9 ""
@@ -223,10 +224,10 @@
   "/usr/local/texlive/2022/texmf-var/fonts/map/pdftex/updmap/pdftex.map" 1647878959 4410336 7d30a02e9fa9a16d7d1f8d037ba69641 ""
   "/usr/local/texlive/2022/texmf-var/web2c/pdftex/pdflatex.fmt" 1670206496 2826441 e27308ecd06e06d3d0ae02cb5d70b126 ""
   "/usr/local/texlive/2022/texmf.cnf" 1647878952 577 209b46be99c9075fd74d4c0369380e8c ""
-  "VImortality.tex" 1679410585 22439 335b015a328b41989750e93fad928cd8 ""
-  "aux/VImortality.aux" 1679410591 7800 b9a8f4276c4c4517f87e8f15e67b1260 "pdflatex"
-  "aux/VImortality.bbl" 1679410589 3879 765d1d11467a99be3221ec966affd6b8 "bibtex aux/VImortality"
-  "aux/VImortality.out" 1679410591 836 539b717e7f350b0eb29d8af624e0068d "pdflatex"
+  "VImortality.tex" 1679411388 22988 7363569fe826b6b3daf073b3ea5f4e19 ""
+  "aux/VImortality.aux" 1679411394 7935 4e37d439e28779128125ea68dbb70dab "pdflatex"
+  "aux/VImortality.bbl" 1679411393 3879 765d1d11467a99be3221ec966affd6b8 "bibtex aux/VImortality"
+  "aux/VImortality.out" 1679411394 1044 647a4f565f69372b00a891f8433fb1d3 "pdflatex"
   "aux/VImortality.spl" 0 -1 0 "pdflatex"
   "figs/latent_dim_comparison.pdf" 1679405077 15137 2c11500a62f53e3c2a10dfb82013959c ""
   "figs/latent_dim_comparison_R2.pdf" 1679405077 16152 194a478f2113f3346d826c8bde7d39a2 ""

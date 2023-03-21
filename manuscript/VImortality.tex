@@ -148,9 +148,13 @@ Our model is a dynamic factor model that can be written as:
 	& X_{i,t} =X_{i,t-1} + K_{i,t-1} + U_{i,t},\quad U_{i,t} \text{ iid }  \mathsf{N}(0,\sigma^2_{X,i}),\label{eq:state_level}\\
 	& K_{i,t} = \mu_i + \varphi_i(K_{i,t-1} - \mu_i) + V_{i,t},\quad V_{i,t} \text{ iid }   \mathsf{N}(0,\sigma^2_{K,i}).\label{eq:state_trend}
 \end{align}
-Here $i=1,2,\ldots , d$, where $d$ is the dimension of the latent variables. We also require $0\leq \varphi_i \leq 1$. The function $f^\psi_a$ is the $a$:th component of $f^\psi:\mathbb R^d \to \mathbb R^{\bar a+1}$. In our examples in Section~\ref{sec:results} $f$ will be given by a shallow neural network.
+Here $i=1,2,\ldots , d$, where $d$ is the dimension of the latent variables. We also require $0\leq \varphi_i \leq 1$. The function $f^\psi_a$ is the $a$:th component of $f^\psi:\mathbb R^d \to \mathbb R^{\bar a+1}$. In our examples in Section~\ref{sec:results} $f^\psi$ will be given by either an affine transformation or a sum of radial basis functions. That is either, $f^\psi(x) = Ax + b$, where $A$ and $b$ are trainable or $f^\psi$ is a sum of radial basis functions, that is, the $a$th component is
+$$
+f^\psi_a(x) = x^T\sum_{i=1}^p w_i \ee^{-\tau^2(a-\mu_i)^2} + b.
+$$
+We will fix $\tau = 10$ and therefore $\cur{w_i ,\mu_i, b}_{i=1}^p$ are the trainable parameters. Compared to the more general affine transformation, radial basis functions have the advantage of guaranteeing a certain smoothness of $f_a$ as a function of $a$, encoding a prior that similar ages should have similar mortality.
 
-We remark here that the exact specification of the above model is not critical for the continuation. For example, the exponential link-function in the Poisson distribution could be changed to some other positive differentiable function without complication. We are assuming that the components of the latent process are independent, instead letting any dependence be captured by $f$. However, this latent process could be replaced with some other Markov process.
+We remark here that the exact specification of the above model is not critical for the continuation. For example, the exponential link function in the Poisson distribution could be changed to some other positive differentiable function without complication. We are assuming that the components of the latent process are independent, instead, we let any dependence be captured by $f$. However, this latent process could be replaced with some other Markov process.
 
 \section{Variational inference}\label{sec:vi}
 Here we explain the main ideas of variational inference (VI) in a general setting. At the end of the section, we connect this to our specific model. For more on VI in general we refer to \cite{ranganath2014black} and for the application to state space models, see \cite{archer2015black}.
@@ -224,30 +228,29 @@ The forecast is validated by calculating the logarithmic score of the forecast o
 
 \section{Results}\label{sec:results}
 
-In this section, we illustrate the performance of the model by fitting it using two datasets on the mortality of Swedish and American males. Both datasets are collected from \cite{hmd2018data}. We evaluate the models using a rolling window; using 60 years to fit the model and 10 years to evaluate the forecast against the actual outcome. The training and evaluation windows are then rolled forward one year and the process repeats. For comparison, we also fit the Lee-Carter and the model by Plat \citep{plat2009stochastic}.
+In this section, we illustrate the performance of the model by fitting it using a dataset on the mortality of Swedish males. The dataset is collected from \cite{hmd2018data}. We evaluate the models using a rolling window; using 60 years to fit the model and 10 years to evaluate the forecast against the actual outcome. The training and evaluation windows are then rolled forward one year and the process repeats. For comparison, we also fit the Lee-Carter and the model by Plat \citep{plat2009stochastic}.
 
+The model is as in \eqref{eq:deathDist} - \eqref{eq:state_trend} where $f$ is either affine or a sum of radial basis functions. We begin by selecting hyperparameters for each model, e.g.\ dimension of the affine transformation or the number of radial bases. We then illustrate the fitted model and the out-of-sample forecasting performance. Finally, we compare our model with some alternatives.
 
-
-The model is as in \eqref{eq:deathDist} - \eqref{eq:state_trend} where $f$ is either a 1 (i.e.\ affine) or a 2-layer neural network with ReLU activation and the middle layer is of dimension 100.
-\subsection{Sweden}\label{seq:results_sweden}
+\subsection{Affine}\label{seq:results_sweden}
 For model selection, we compare the out-of-sample log-score for varying dimensions of the latent process. In Figure \ref{fig:model_evaluation_sweden_logscore} and \ref{fig:model_evaluation_sweden_R2} we see that dimension 3 overall performs best. We have performed experiments also for dimensions 1 and 2, but the performance was considerably worse, and they are therefore excluded from the picture. In Figure \ref{fig:model_comparison_sweden} we compare the $R^2$ metric of our model with that of Lee-Carter and Plat. We see that the Lee-Carter model is not competitive, while the model by Plat is slightly worse than ours.
 \begin{figure}
     \centering
-    \begin{subfigure}[b]{0.45\textwidth}
+    \begin{subfigure}[b]{0.3\textwidth}
         \centering
         \includegraphics[width=\textwidth]{figs/latent_dim_comparison.pdf}
         \caption{Out-of-sample log score against forecast horizon for different number of latent dimensions.}
         \label{fig:model_evaluation_sweden_logscore}
     \end{subfigure}
     \hfill
-    \begin{subfigure}[b]{0.45\textwidth}
+    \begin{subfigure}[b]{0.3\textwidth}
         \centering
         \includegraphics[width=\textwidth]{figs/latent_dim_comparison_R2.pdf}
         \caption{Out-of-sample $R^2$ against forecast horizon for different number of latent dimensions.}
         \label{fig:model_evaluation_sweden_R2}
     \end{subfigure}
     \hfill
-    \begin{subfigure}[b]{0.45\textwidth}
+    \begin{subfigure}[b]{0.3\textwidth}
         \centering
         \includegraphics[width=\textwidth]{figs/model_comparison.pdf}
         \caption{Out-of-sample $R^2$ for our model with three latent dimensions compared to the Lee-Carter and Plat model.}
@@ -256,25 +259,6 @@ For model selection, we compare the out-of-sample log-score for varying dimensio
        \caption{Model evaluation when fitted on Swedish male mortality data with the first year from 1920 to 1952. Each model is fitted using 60 years of data and evaluated on the following 10 years. The figures show that three latent dimensions give the best out-of-sample performance in our model and that our model outperforms the comparison models.}
        \label{fig:model_evaluation_sweden}
 \end{figure}
-The model performance is summarized in Table \ref{table:model_comparision_sweden} where the log-score and $R^2$ are shown for each model, averaged over all the forecast horizons and rolling windows.
-\begin{table}[h!]
-    \centering
-    \begin{tabular}{l l l} 
-        \hline
-        Model & Log-score & $R^2$ \\  
-        \hline\hline
-        Our & -455.1 & 0.664 \\
-        Lee-Carter & -608.5 & 0.215 \\ 
-        Plat & -474.9 & 0.608 \\
-        \hline
-    \end{tabular}
-    \caption{Out-of-sample model evaluation metrics for Sweden. Numbers are averaged over all forecast horizons and rolling windows.}
-    \label{table:model_comparision_sweden}
-\end{table}
-%         Log score	    naive	    saturated	R2	        relative
-% LC	    -608.482678	    -794.965564	-344.072618	0.215000	1.769242
-% Plat    -474.918951	    -794.965564	-344.072618	0.608068	1.380638
-% VI      -455.137394	    -794.965564	-344.072618	0.663549	1.323074
 Figure \ref{fig:model_illustration_sweden} illustrates the fitted model. In particular, we note that the in-sample fit of the mortality rates in \ref{fig:mortality_rates_in_sample_fit_sweden} are quite good.
 \begin{figure}
     \centering    \begin{subfigure}[b]{0.45\textwidth}
@@ -335,8 +319,24 @@ Figure \ref{fig:model_forecast_sweden} shows the smoothed mortality rates and fo
        \label{fig:model_forecast_sweden}
 \end{figure}
 
-\subsection{USA}
+\subsection{Radial basis functions}
 
+\subsection{Comparison}
+The model performance is summarized in Table \ref{table:model_comparision_sweden} where the log-score and $R^2$ are shown for each model, averaged over all the forecast horizons and rolling windows.
+\begin{table}[h!]
+    \centering
+    \begin{tabular}{l l l} 
+        \hline
+        Model & Log-score & $R^2$ \\  
+        \hline\hline
+        Affine & -455.1 & 0.664 \\
+        Lee-Carter & -608.5 & 0.215 \\ 
+        Plat & -474.9 & 0.608 \\
+        \hline
+    \end{tabular}
+    \caption{Out-of-sample model evaluation metrics for Sweden. Numbers are averaged over all forecast horizons and rolling windows.}
+    \label{table:model_comparision_sweden}
+\end{table}
 
 
 \section{Conclusions}\label{sec:conclusions}
