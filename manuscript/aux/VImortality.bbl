@@ -88,4 +88,13 @@ T.~Gneiting, A.~E. Raftery, Strictly proper scoring rules, prediction, and
 R.~Plat, On stochastic mortality modeling, Insurance: Mathematics and Economics
   45~(3) (2009) 393--404.
 
+\bibitem{stmomo2018}
+A.~M. Villegas, V.~K. Kaishev, P.~Millossovich,
+  \href{https://www.jstatsoft.org/index.php/jss/article/view/v084i03}{Stmomo:
+  An r package for stochastic mortality modeling}, Journal of Statistical
+  Software 84~(3) (2018) 1–38.
+\newblock \href {https://doi.org/10.18637/jss.v084.i03}
+  {\path{doi:10.18637/jss.v084.i03}}.
+\newline\urlprefix\url{https://www.jstatsoft.org/index.php/jss/article/view/v084i03}
+
 \end{thebibliography}

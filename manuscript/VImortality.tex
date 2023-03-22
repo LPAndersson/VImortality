@@ -326,6 +326,12 @@ This section follows the same pattern as the previous. We choose hyperparameters
 
 
 \subsection{Comparison}
+We compare our model to two other commonly used mortality models, the Lee-Carter model with Poisson distribution from \cite{brouhns2002poisson} and the model by Plat \cite{plat2009stochastic}. Both are fit using the StMoMo package in R \cite{stmomo2018}. The Lee-Carter model is
+$$
+D_{at}\sim \mathsf{Po}(E_{at}\exp\pa{\alpha_a + \beta_a\kappa_t}),
+$$
+where $\alpha_a$ and $\beta_a$ are factor loadings and $\kappa_t$ is the dynamic factor modelled as a random walk with drift.
+
 The model performance is summarized in Table \ref{table:model_comparision_sweden} where the log-score and $R^2$ are shown for each model, averaged over all the forecast horizons and rolling windows.
 \begin{table}[h!]
     \centering
