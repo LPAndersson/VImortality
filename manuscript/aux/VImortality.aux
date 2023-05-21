@@ -16,7 +16,6 @@
 \gdef\HyperFirstAtBeginDocument#1{#1}
 \providecommand\HyField@AuxAddToFields[1]{}
 \providecommand\HyField@AuxAddToCoFields[2]{}
-\bibstyle{elsarticle-num}
 \citation{gompertz1825nature}
 \citation{lee1992modeling}
 \citation{booth2008mortality,haberman2011comparative,carfora2017quantitative}
@@ -26,73 +25,90 @@
 \@writefile{toc}{\contentsline {section}{\numberline {1}Introduction}{1}{section.1}\protected@file@percent }
 \citation{nguyen2021temporal,wang2019deep,salinas2020deepar,rangapuram2018deep}
 \citation{ranganath2014black}
+\citation{richman2019lee,richman2021neural,perla2021time}
+\citation{nigri2019deep,marino2020measuring,lindholm2022efficient}
+\citation{deprez2017machine}
 \citation{bingham2018pyro}
+\citation{ranganath2014black}
+\citation{archer2015black}
 \@writefile{toc}{\contentsline {section}{\numberline {2}Model}{3}{section.2}\protected@file@percent }
 \newlabel{sec:model}{{2}{3}{Model}{section.2}{}}
 \newlabel{eq:deathDist}{{1}{3}{Model}{equation.2.1}{}}
 \newlabel{eq:state_level}{{2}{3}{Model}{equation.2.2}{}}
 \newlabel{eq:state_trend}{{3}{3}{Model}{equation.2.3}{}}
-\citation{ranganath2014black}
-\citation{archer2015black}
-\@writefile{toc}{\contentsline {section}{\numberline {3}Variational inference}{4}{section.3}\protected@file@percent }
-\newlabel{sec:vi}{{3}{4}{Variational inference}{section.3}{}}
-\newlabel{eq: reparametrisation trick}{{8}{5}{Variational inference}{equation.3.8}{}}
-\@writefile{toc}{\contentsline {section}{\numberline {4}Forecasting and validation}{5}{section.4}\protected@file@percent }
-\newlabel{sec:forecastValidation}{{4}{5}{Forecasting and validation}{section.4}{}}
+\@writefile{toc}{\contentsline {section}{\numberline {3}Variational inference}{3}{section.3}\protected@file@percent }
+\newlabel{sec:vi}{{3}{3}{Variational inference}{section.3}{}}
+\newlabel{eq: reparametrisation trick}{{4}{4}{Variational inference}{equation.3.4}{}}
 \citation{andersson2020mortality}
 \citation{gneiting2007strictly}
 \citation{hmd2018data}
+\@writefile{toc}{\contentsline {section}{\numberline {4}Forecasting and validation}{5}{section.4}\protected@file@percent }
+\newlabel{sec:forecastValidation}{{4}{5}{Forecasting and validation}{section.4}{}}
 \citation{plat2009stochastic}
+\providecommand*\caption@xref[2]{\@setref\relax\@undefined{#1}}
+\newlabel{fig:model_evaluation_sweden_logscore}{{1a}{6}{\relax }{figure.caption.1}{}}
+\newlabel{sub@fig:model_evaluation_sweden_logscore}{{a}{6}{\relax }{figure.caption.1}{}}
+\newlabel{fig:model_evaluation_sweden_R2}{{1b}{6}{\relax }{figure.caption.1}{}}
+\newlabel{sub@fig:model_evaluation_sweden_R2}{{b}{6}{\relax }{figure.caption.1}{}}
+\@writefile{lof}{\contentsline {figure}{\numberline {1}{\ignorespaces Affine model: Evaluation of the model when fitted on Swedish male mortality data with the first year from 1931 to 1952. Each model is fitted using 60 years of data and evaluated on the following 10 years. The figures show that 3 latent dimensions give the best out-of-sample performance.\relax }}{6}{figure.caption.1}\protected@file@percent }
+\newlabel{fig:affine_model_evaluation_sweden}{{1}{6}{Affine model: Evaluation of the model when fitted on Swedish male mortality data with the first year from 1931 to 1952. Each model is fitted using 60 years of data and evaluated on the following 10 years. The figures show that 3 latent dimensions give the best out-of-sample performance.\relax }{figure.caption.1}{}}
 \@writefile{toc}{\contentsline {section}{\numberline {5}Results}{6}{section.5}\protected@file@percent }
 \newlabel{sec:results}{{5}{6}{Results}{section.5}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {5.1}Affine}{6}{subsection.5.1}\protected@file@percent }
+\newlabel{seq:results_sweden}{{5.1}{6}{Affine}{subsection.5.1}{}}
+\newlabel{fig:linear_mortality_rates_in_sample_fit_sweden}{{2d}{7}{In-sample fit of model mortality rates. Dots are observed rates and solid lines are the fitted model. This model is fitted on data from 1952 to 2011.\relax }{figure.caption.2}{}}
+\newlabel{sub@fig:linear_mortality_rates_in_sample_fit_sweden}{{d}{7}{In-sample fit of model mortality rates. Dots are observed rates and solid lines are the fitted model. This model is fitted on data from 1952 to 2011.\relax }{figure.caption.2}{}}
+\@writefile{lof}{\contentsline {figure}{\numberline {2}{\ignorespaces Affine model: Illustration of the model fitted to Swedish data from 1952 to 2011 with three latent dimensions.\relax }}{7}{figure.caption.2}\protected@file@percent }
+\newlabel{fig:linear_model_illustration_sweden}{{2}{7}{Affine model: Illustration of the model fitted to Swedish data from 1952 to 2011 with three latent dimensions.\relax }{figure.caption.2}{}}
 \citation{brouhns2002poisson}
 \citation{plat2009stochastic}
 \citation{stmomo2018}
-\providecommand*\caption@xref[2]{\@setref\relax\@undefined{#1}}
-\newlabel{fig:model_evaluation_sweden_logscore}{{1a}{7}{Out-of-sample log score against forecast horizon for different number of latent dimensions.\relax }{figure.caption.1}{}}
-\newlabel{sub@fig:model_evaluation_sweden_logscore}{{a}{7}{Out-of-sample log score against forecast horizon for different number of latent dimensions.\relax }{figure.caption.1}{}}
-\newlabel{fig:model_evaluation_sweden_R2}{{1b}{7}{Out-of-sample $R^2$ against forecast horizon for different number of latent dimensions.\relax }{figure.caption.1}{}}
-\newlabel{sub@fig:model_evaluation_sweden_R2}{{b}{7}{Out-of-sample $R^2$ against forecast horizon for different number of latent dimensions.\relax }{figure.caption.1}{}}
-\newlabel{fig:model_comparison_sweden}{{1c}{7}{Out-of-sample $R^2$ for our model with three latent dimensions compared to the Lee-Carter and Plat model.\relax }{figure.caption.1}{}}
-\newlabel{sub@fig:model_comparison_sweden}{{c}{7}{Out-of-sample $R^2$ for our model with three latent dimensions compared to the Lee-Carter and Plat model.\relax }{figure.caption.1}{}}
-\@writefile{lof}{\contentsline {figure}{\numberline {1}{\ignorespaces Model evaluation when fitted on Swedish male mortality data with the first year from 1920 to 1952. Each model is fitted using 60 years of data and evaluated on the following 10 years. The figures show that three latent dimensions give the best out-of-sample performance in our model and that our model outperforms the comparison models.\relax }}{7}{figure.caption.1}\protected@file@percent }
-\newlabel{fig:model_evaluation_sweden}{{1}{7}{Model evaluation when fitted on Swedish male mortality data with the first year from 1920 to 1952. Each model is fitted using 60 years of data and evaluated on the following 10 years. The figures show that three latent dimensions give the best out-of-sample performance in our model and that our model outperforms the comparison models.\relax }{figure.caption.1}{}}
-\@writefile{toc}{\contentsline {subsection}{\numberline {5.1}Affine}{7}{subsection.5.1}\protected@file@percent }
-\newlabel{seq:results_sweden}{{5.1}{7}{Affine}{subsection.5.1}{}}
-\@writefile{toc}{\contentsline {subsection}{\numberline {5.2}Radial basis functions}{7}{subsection.5.2}\protected@file@percent }
-\@writefile{toc}{\contentsline {subsection}{\numberline {5.3}Comparison}{7}{subsection.5.3}\protected@file@percent }
-\newlabel{fig:mortality_rates_in_sample_fit_sweden}{{2d}{8}{In-sample fit of model mortality rates. Dots are observed rates and solid lines are the fitted model. This model is fitted on data from 1952 to 2011.\relax }{figure.caption.2}{}}
-\newlabel{sub@fig:mortality_rates_in_sample_fit_sweden}{{d}{8}{In-sample fit of model mortality rates. Dots are observed rates and solid lines are the fitted model. This model is fitted on data from 1952 to 2011.\relax }{figure.caption.2}{}}
-\@writefile{lof}{\contentsline {figure}{\numberline {2}{\ignorespaces Illustration of the model fitted to Swedish data from 1952 to 2011 with three latent dimensions.\relax }}{8}{figure.caption.2}\protected@file@percent }
-\newlabel{fig:model_illustration_sweden}{{2}{8}{Illustration of the model fitted to Swedish data from 1952 to 2011 with three latent dimensions.\relax }{figure.caption.2}{}}
-\@writefile{lof}{\contentsline {figure}{\numberline {3}{\ignorespaces Mortality forecasts for four different age groups. Solid line is the smoothed mortality rate, dashed line is the mean forecasted mortality rate and shaded region is $\pm $ 1 standard deviation of the forecasted observed mortality rate. Dots indicate observed mortality rates.\relax }}{9}{figure.caption.3}\protected@file@percent }
-\newlabel{fig:model_forecast_sweden}{{3}{9}{Mortality forecasts for four different age groups. Solid line is the smoothed mortality rate, dashed line is the mean forecasted mortality rate and shaded region is $\pm $ 1 standard deviation of the forecasted observed mortality rate. Dots indicate observed mortality rates.\relax }{figure.caption.3}{}}
-\bibdata{biblio}
-\bibcite{gompertz1825nature}{{1}{}{{}}{{}}}
-\bibcite{lee1992modeling}{{2}{}{{}}{{}}}
-\bibcite{booth2008mortality}{{3}{}{{}}{{}}}
-\bibcite{haberman2011comparative}{{4}{}{{}}{{}}}
-\bibcite{carfora2017quantitative}{{5}{}{{}}{{}}}
-\bibcite{andersson2020mortality}{{6}{}{{}}{{}}}
-\@writefile{lot}{\contentsline {table}{\numberline {1}{\ignorespaces Out-of-sample model evaluation metrics for Sweden. Numbers are averaged over all forecast horizons and rolling windows.\relax }}{10}{table.caption.4}\protected@file@percent }
-\newlabel{table:model_comparision_sweden}{{1}{10}{Out-of-sample model evaluation metrics for Sweden. Numbers are averaged over all forecast horizons and rolling windows.\relax }{table.caption.4}{}}
-\@writefile{toc}{\contentsline {section}{\numberline {6}Conclusions}{10}{section.6}\protected@file@percent }
-\newlabel{sec:conclusions}{{6}{10}{Conclusions}{section.6}{}}
-\bibcite{brouhns2002poisson}{{7}{}{{}}{{}}}
-\bibcite{de2006extending}{{8}{}{{}}{{}}}
-\bibcite{nguyen2021temporal}{{9}{}{{}}{{}}}
-\bibcite{wang2019deep}{{10}{}{{}}{{}}}
-\bibcite{salinas2020deepar}{{11}{}{{}}{{}}}
-\bibcite{rangapuram2018deep}{{12}{}{{}}{{}}}
-\bibcite{ranganath2014black}{{13}{}{{}}{{}}}
-\bibcite{bingham2018pyro}{{14}{}{{}}{{}}}
-\bibcite{archer2015black}{{15}{}{{}}{{}}}
-\bibcite{gneiting2007strictly}{{16}{}{{}}{{}}}
-\bibcite{hmd2018data}{{17}{}{{}}{{}}}
-\bibcite{plat2009stochastic}{{18}{}{{}}{{}}}
-\bibcite{stmomo2018}{{19}{}{{}}{{}}}
-\providecommand\NAT@force@numbers{}\NAT@force@numbers
-\newlabel{LastPage}{{}{12}{}{page.12}{}}
-\xdef\lastpage@lastpage{12}
-\xdef\lastpage@lastpageHy{12}
-\gdef \@abspage@last{12}
+\@writefile{lof}{\contentsline {figure}{\numberline {3}{\ignorespaces Affine model: Mortality forecasts for the age groups 20, 40, 60 and 80 (from the bottom up). The solid line is the smoothed mortality rate, the dashed line is the mean forecasted mortality rate and the shaded region is $\pm $ 1 standard deviation of the forecasted realised mortality rate. Dots indicate observed mortality rates.\relax }}{8}{figure.caption.3}\protected@file@percent }
+\newlabel{fig:model_linear_forecast_sweden}{{3}{8}{Affine model: Mortality forecasts for the age groups 20, 40, 60 and 80 (from the bottom up). The solid line is the smoothed mortality rate, the dashed line is the mean forecasted mortality rate and the shaded region is $\pm $ 1 standard deviation of the forecasted realised mortality rate. Dots indicate observed mortality rates.\relax }{figure.caption.3}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {5.2}Radial basis functions}{8}{subsection.5.2}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {5.3}Comparison}{8}{subsection.5.3}\protected@file@percent }
+\@writefile{lof}{\contentsline {figure}{\numberline {4}{\ignorespaces Radial basis model: Evaluation of the model when fitted on Swedish male mortality data with the first year from 1931 to 1952. Each model is fitted using 60 years of data and evaluated on the following 10 years. The figures show that 4 latent dimensions and 15 radial basis functions give the best out-of-sample performance.\relax }}{9}{figure.caption.4}\protected@file@percent }
+\newlabel{fig:radial_model_evaluation_sweden}{{4}{9}{Radial basis model: Evaluation of the model when fitted on Swedish male mortality data with the first year from 1931 to 1952. Each model is fitted using 60 years of data and evaluated on the following 10 years. The figures show that 4 latent dimensions and 15 radial basis functions give the best out-of-sample performance.\relax }{figure.caption.4}{}}
+\@writefile{lot}{\contentsline {table}{\numberline {1}{\ignorespaces Out-of-sample model evaluation metrics for Sweden. Numbers are averaged over all forecast horizons and rolling windows.\relax }}{9}{table.caption.7}\protected@file@percent }
+\newlabel{table:model_comparision_sweden}{{1}{9}{Out-of-sample model evaluation metrics for Sweden. Numbers are averaged over all forecast horizons and rolling windows.\relax }{table.caption.7}{}}
+\@writefile{toc}{\contentsline {section}{\numberline {6}Conclusions}{9}{section.6}\protected@file@percent }
+\newlabel{sec:conclusions}{{6}{9}{Conclusions}{section.6}{}}
+\newlabel{fig:radial_loadings}{{5c}{10}{Factor loadings for the model with 4 latent dimensions\relax }{figure.caption.5}{}}
+\newlabel{sub@fig:radial_loadings}{{c}{10}{Factor loadings for the model with 4 latent dimensions\relax }{figure.caption.5}{}}
+\newlabel{fig:radial_mortality_rates_in_sample_fit_sweden}{{5d}{10}{In-sample fit of model mortality rates. Dots are observed rates and solid lines are the fitted model. This model is fitted on data from 1952 to 2011.\relax }{figure.caption.5}{}}
+\newlabel{sub@fig:radial_mortality_rates_in_sample_fit_sweden}{{d}{10}{In-sample fit of model mortality rates. Dots are observed rates and solid lines are the fitted model. This model is fitted on data from 1952 to 2011.\relax }{figure.caption.5}{}}
+\@writefile{lof}{\contentsline {figure}{\numberline {5}{\ignorespaces Radial basis model: Illustration of the model fitted to Swedish data from 1952 to 2011 with 4 latent dimensions.\relax }}{10}{figure.caption.5}\protected@file@percent }
+\newlabel{fig:radial_model_illustration_sweden}{{5}{10}{Radial basis model: Illustration of the model fitted to Swedish data from 1952 to 2011 with 4 latent dimensions.\relax }{figure.caption.5}{}}
+\@writefile{lof}{\contentsline {figure}{\numberline {6}{\ignorespaces Radial basis model: Mortality forecasts for the age groups 20, 40, 60 and 80 (from the bottom up). The solid line is the smoothed mortality rate, the dashed line is the mean forecasted mortality rate and the shaded region is $\pm $ 1 standard deviation of the forecasted realised mortality rate. Dots indicate observed mortality rates.\relax }}{11}{figure.caption.6}\protected@file@percent }
+\newlabel{fig:radial_model_forecast_sweden}{{6}{11}{Radial basis model: Mortality forecasts for the age groups 20, 40, 60 and 80 (from the bottom up). The solid line is the smoothed mortality rate, the dashed line is the mean forecasted mortality rate and the shaded region is $\pm $ 1 standard deviation of the forecasted realised mortality rate. Dots indicate observed mortality rates.\relax }{figure.caption.6}{}}
+\@writefile{lof}{\contentsline {figure}{\numberline {7}{\ignorespaces Comparison of our model and the Lee-Carter and Plat models. Each model is fitted using 60 years of data and evaluated on the following 10 years. The figures show that both the affine and radial basis models perform well.\relax }}{11}{figure.caption.8}\protected@file@percent }
+\newlabel{fig:model_comparison}{{7}{11}{Comparison of our model and the Lee-Carter and Plat models. Each model is fitted using 60 years of data and evaluated on the following 10 years. The figures show that both the affine and radial basis models perform well.\relax }{figure.caption.8}{}}
+\bibstyle{apalike}
+\bibdata{mortality}
+\bibcite{andersson2020mortality}{{1}{2021}{{Andersson and Lindholm}}{{}}}
+\bibcite{archer2015black}{{2}{2015}{{Archer et~al.}}{{}}}
+\bibcite{bingham2018pyro}{{3}{2018}{{Bingham et~al.}}{{}}}
+\bibcite{booth2008mortality}{{4}{2008}{{Booth and Tickle}}{{}}}
+\bibcite{brouhns2002poisson}{{5}{2002}{{Brouhns et~al.}}{{}}}
+\bibcite{carfora2017quantitative}{{6}{2017}{{Carfora et~al.}}{{}}}
+\bibcite{de2006extending}{{7}{2006}{{De~Jong and Tickle}}{{}}}
+\bibcite{deprez2017machine}{{8}{2017}{{Deprez et~al.}}{{}}}
+\bibcite{gneiting2007strictly}{{9}{2007}{{Gneiting and Raftery}}{{}}}
+\bibcite{gompertz1825nature}{{10}{1825}{{Gompertz}}{{}}}
+\bibcite{haberman2011comparative}{{11}{2011}{{Haberman and Renshaw}}{{}}}
+\bibcite{hmd2018data}{{12}{2022}{{Human Mortality Database}}{{}}}
+\bibcite{lee1992modeling}{{13}{1992}{{Lee and Carter}}{{}}}
+\bibcite{lindholm2022efficient}{{14}{2022}{{Lindholm and Palmborg}}{{}}}
+\bibcite{marino2020measuring}{{15}{2020}{{Marino and Levantesi}}{{}}}
+\bibcite{nguyen2021temporal}{{16}{2021}{{Nguyen and Quanz}}{{}}}
+\bibcite{nigri2019deep}{{17}{2019}{{Nigri et~al.}}{{}}}
+\bibcite{perla2021time}{{18}{2021}{{Perla et~al.}}{{}}}
+\bibcite{plat2009stochastic}{{19}{2009}{{Plat}}{{}}}
+\bibcite{ranganath2014black}{{20}{2014}{{Ranganath et~al.}}{{}}}
+\bibcite{rangapuram2018deep}{{21}{2018}{{Rangapuram et~al.}}{{}}}
+\bibcite{richman2019lee}{{22}{2019}{{Richman and Wuthrich}}{{}}}
+\bibcite{richman2021neural}{{23}{2021}{{Richman and W{\"u}thrich}}{{}}}
+\bibcite{salinas2020deepar}{{24}{2020}{{Salinas et~al.}}{{}}}
+\bibcite{stmomo2018}{{25}{2018}{{Villegas et~al.}}{{}}}
+\bibcite{wang2019deep}{{26}{2019}{{Wang et~al.}}{{}}}
+\gdef \@abspage@last{14}

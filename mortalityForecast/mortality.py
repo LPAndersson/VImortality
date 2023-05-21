@@ -28,7 +28,7 @@ class Mortality:
             self.emitter = Emitter(
                 input_dim = param['max_age'] + 1, 
                 param = None,
-                model_type = 'radial_basis', 
+                model_type = 'linear', 
                 latent_dim = param['latent_dim']
                 )
         elif param['model'] == 'radial_basis':
@@ -295,73 +295,7 @@ class Mortality:
         
         return (mean_mortality, std_mortality)
 
-    # def forecast_sim(self, forecast_length = 10, mc_samples = 1000, percentiles = [10, 50, 90]):
-
-    #     #Distribution of last time in training set
-    #     last_level_loc = self.level_loc[:,-1]
-    #     last_trend_loc = self.trend_loc[:,-1]
-
-    #     last_level_scale = self.level_scale[:,-1]
-    #     last_trend_scale = self.trend_scale[:,-1]
-
-    #     last_corr = self.level_trend_cov[:,-1]
-
-    #     #Latent process standard deviation
-    #     level_noise_scale = self.dmm.scale_transform( self.dmm.level_scale)
-    #     trend_noise_scale = self.dmm.scale_transform( self.dmm.trend_scale)
-
-    #     #Declare arrays to hold simulations
-    #     level_forecast = torch.zeros((last_level_loc.size()[0],forecast_length, mc_samples))
-    #     trend_forecast = torch.zeros((last_trend_loc.size()[0],forecast_length, mc_samples))
-
-    #     for j in range(mc_samples):
-
-    #         #Sample last time in training set
-    #         last_level = torch.distributions.Normal( last_level_loc, last_level_scale ).sample()
-
-    #         last_trend_mean = last_trend_loc + last_corr * last_trend_scale /last_level_scale * (last_level - last_level_loc)
-    #         last_trend_std = last_trend_scale * torch.sqrt(1-last_corr*last_corr)
-
-    #         last_trend = torch.distributions.Normal( last_trend_mean, last_trend_std ).sample()
-            
-    #         #Get mean of next time step
-    #         (level_loc, trend_loc) = self.dmm.latent_transition.forward( last_level, last_trend )
-
-    #         #Sample next time step
-    #         level_forecast[:, 0, j] = torch.distributions.Normal( level_loc, level_noise_scale ).sample()
-    #         trend_forecast[:, 0, j] = torch.distributions.Normal( trend_loc, trend_noise_scale ).sample()
-            
-    #         for i in range(1,forecast_length):
-    #             (level_loc, trend_loc) = self.dmm.latent_transition.forward( level_forecast[:, i-1, j], trend_forecast[:, i-1, j] )
-    #             level_forecast[:, i, j] = torch.distributions.Normal(level_loc , level_noise_scale ).sample()
-    #             trend_forecast[:, i, j] = torch.distributions.Normal(trend_loc , trend_noise_scale ).sample()
-
-    #     #Calculate mean and standard deviation of forecast
-    #     level_mean_forecast = torch.zeros((last_level_loc.size()[0],forecast_length))
-    #     level_scale_forecast = torch.zeros((last_level_loc.size()[0],forecast_length))
-
-    #     for i in range(forecast_length):
-    #         for j in range(last_level_loc.size()[0]):
-    #             level_mean_forecast[j,i] = torch.mean(level_forecast[j, i, :])
-    #             level_scale_forecast[j,i] = torch.std(level_forecast[j, i, :])
-
-    #     #Calculate percentiles
-    #     p_list = []
-
-    #     for p in percentiles:
-    #         level_perc_forecast = np.zeros((last_level_loc.size()[0],forecast_length))
-
-    #         for i in range(forecast_length):
-    #             for j in range(last_level_loc.size()[0]):
-    #                 level_perc_forecast[j,i] = np.percentile(level_forecast[j, i, :].detach().numpy(), p)
-
-    #     p_list.append( level_perc_forecast.copy() )
-
-    #     return (level_mean_forecast.detach().numpy(),
-    #             level_scale_forecast.detach().numpy(),
-    #             p_list )
-
-    def forecast_mortality_rate(self, age, forecast_length, mc_samples = 1000):
+    def forecast_mortality_rate(self, age, forecast_length, quantiles = [0.25, 0.75,], mc_samples = 1000):
 
         exposure = self.data[1]
 
@@ -369,6 +303,7 @@ class Mortality:
 
         mean_mortality = np.empty(forecast_length)
         std_mortality = np.empty(forecast_length)
+        quantiles_mortality = np.empty([forecast_length,len(quantiles)])
 
         for t in range(forecast_length):
             mortality = np.empty(mc_samples)
@@ -378,8 +313,9 @@ class Mortality:
                 mortality[i] = torch.distributions.Poisson(intensity * exposure[t,age]).sample() / exposure[t,age]
             mean_mortality[t] = np.mean(mortality)
             std_mortality[t] = np.std(mortality)
+            quantiles_mortality[t,:] = np.quantile(mortality, quantiles)
 
-        return (mean_mortality, std_mortality)
+        return (mean_mortality, std_mortality, quantiles_mortality)
 
     def forecast_mortality(self, age, forecast_length, mc_samples = 1000):
 

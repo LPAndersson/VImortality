@@ -1,15 +1,15 @@
 log_score_plat <- function(data, train_from, train_to, forecast_length){
-  
+
   ages.fit <- 0:100
-  
+
   test_years <- (train_to+1):(train_to + forecast_length)
-  
+
   nsim <- 10000
-  
+
   f2 <- function(x, ages) mean(ages) - x
-  
+
   f3 <- function(x, ages) pmax(mean(ages)-x,0)
-  
+
   constPlat <- function(ax, bx, kt, b0x, gc, wxt, ages){
     nYears <- dim(wxt)[2]
     x <- ages
@@ -31,34 +31,34 @@ log_score_plat <- function(data, train_from, train_to, forecast_length){
     kt[3, ] <- kt[3, ] - ci[3]
     list(ax = ax, bx = bx, kt = kt, b0x = b0x, gc = gc)
   }
-  
+
   PLAT <- StMoMo(link = "log", staticAgeFun = TRUE,
                  periodAgeFun = c("1", f2, f3), cohortAgeFun = "1",
                  constFun = constPlat)
-  
+
   ages.fit <- 0:100
-  
+
   wxt <- genWeightMat(ages = ages.fit, years = train_from:train_to, clip = 3)
-  
-  
+
+
   PLATfit <- fit(
-    PLAT, 
-    data = data, 
-    ages.fit = ages.fit, 
+    PLAT,
+    data = data,
+    ages.fit = ages.fit,
     years.fit = train_from:train_to,
     wxt = wxt
   )
-  
+
   PLATsim <- simulate(
-    PLATfit, 
-    nsim = nsim, 
-    h = forecast_length, 
+    PLATfit,
+    nsim = nsim,
+    h = forecast_length,
     gc.order = c(2, 0, 0)
   )
-  
+
   log_score <- array(data = 0.0, dim = c(nsim, length(ages.fit)))
   log_score_t <- array(data = 0.0, dim = forecast_length)
-  
+
   for (t in seq_len(forecast_length)) {
     for (i in seq_len(nsim)) {
       for (age in seq_len(length(ages.fit))) {
@@ -70,11 +70,11 @@ log_score_plat <- function(data, train_from, train_to, forecast_length){
         log_score[i,age] <- dpois(deaths, intensity * exposure, log = TRUE)
       }
     }
-    
+
     log_score_t[t] <- sum( matrixStats::colLogSumExps(log_score) - log(nsim) )
-    
+
   }
-  
+
   log_score_t
 }
 

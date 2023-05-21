@@ -17,7 +17,6 @@ USA = dset("usa",
 "../data/expUsaHMD.txt",
 "../data/deathsUsaHMD.txt")
 
-
 def load_data(param, train, test):
 
 	dataset = param['country']

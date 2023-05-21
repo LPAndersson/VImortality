@@ -28,7 +28,7 @@ param_tuple = tuple()
 start_years = range(first_year, last_year - train_length - forecast_length + 2)
 countries = [mf.data_loader.SWEDEN]
 nn_layers = [1]
-latent_dims = [1,2,3,4,5,6,7,8,9]
+latent_dims = [1]
 
 for start_year, country, nn_layer, latent_dim in product(start_years, countries, nn_layers, latent_dims):
     param_tuple = param_tuple + ({

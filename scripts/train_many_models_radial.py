@@ -16,19 +16,19 @@ from itertools import product
 from itertools import cycle
 import psutil 
 
-first_year = 1944
+first_year = 1931
 train_length = 60
 forecast_length = 10
-last_year = 2020
+last_year = 2021
 
 param_tuple = tuple()
 
 start_years = range(first_year, last_year - train_length - forecast_length + 2)
 countries = [mf.data_loader.SWEDEN]
 
-num_bases = [5,10,15]
+num_bases = [20]
 taus= [10.0]
-latent_dims = [3,4,5]
+latent_dims = [3,5]
 
 for start_year, country, latent_dim, tau, num_basis in product(start_years, countries, latent_dims, taus, num_bases):
     param_tuple = param_tuple + ({
@@ -114,7 +114,7 @@ def train(param):
 
 if __name__ == '__main__':
 
-    n_cores = psutil.cpu_count(logical = True) -1
+    n_cores = 3 #psutil.cpu_count(logical = True) -1
     print(len(param_tuple))
     print(n_cores)
 

@@ -1,4 +1,4 @@
-Country,first_year_train,last_year_train,Sex,max_age,nn_layers,latent_dim,Forecast horizon,Log score,Date,Time,Model
+country,first_year_train,last_year_train,sex,max_age,nn_layers,latent_dim,forecast_horizon,log_score,date,time,model
 sweden,1920,1979,Male,100,1,5,1,356.61784642183807,09/03/2023,17:03:23,saturated
 sweden,1920,1979,Male,100,1,5,2,355.244657053943,09/03/2023,17:03:23,saturated
 sweden,1920,1979,Male,100,1,5,3,353.02479517162726,09/03/2023,17:03:23,saturated
