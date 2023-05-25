@@ -1,14 +1,14 @@
 # Fdb version 3
-["bibtex aux/VImortality"] 1684679357 "aux/VImortality.aux" "aux/VImortality.bbl" "aux/VImortality" 1684679429
+["bibtex aux/VImortality"] 1685007021 "aux/VImortality.aux" "aux/VImortality.bbl" "aux/VImortality" 1685014197
   "/usr/local/texlive/2021/texmf-dist/bibtex/bst/base/apalike.bst" 1292289607 24635 604dafcc79f521a11ea73e506e1fbd98 ""
-  "aux/VImortality.aux" 1684679358 11772 678ddb9ce915df20096fb5e115af42ca "pdflatex"
+  "aux/VImortality.aux" 1685012134 11774 08aaaa2c0cfab220690bbe094ed74f2a "pdflatex"
   "mortality.bib" 1684677635 18942 499f502d46f7ac45f7a8541da7cef573 ""
   (generated)
-  "aux/VImortality.blg"
   "aux/VImortality.bbl"
-["pdflatex"] 1684679357 "/Users/patan506/Library/CloudStorage/Dropbox/VImortality/manuscript/VImortality.tex" "/Users/patan506/Library/CloudStorage/Dropbox/VImortality/manuscript/aux/VImortality.pdf" "VImortality" 1684679429
-  "/Users/patan506/Library/CloudStorage/Dropbox/VImortality/manuscript/VImortality.tex" 1684679429 30077 062ba4e42a979bb936e8a272a006c0ad ""
-  "/Users/patan506/Library/CloudStorage/Dropbox/VImortality/manuscript/aux/VImortality.aux" 1684679358 11772 678ddb9ce915df20096fb5e115af42ca ""
+  "aux/VImortality.blg"
+["pdflatex"] 1685012132 "/Users/patan506/Library/CloudStorage/Dropbox/VImortality/manuscript/VImortality.tex" "/Users/patan506/Library/CloudStorage/Dropbox/VImortality/manuscript/aux/VImortality.pdf" "VImortality" 1685014197
+  "/Users/patan506/Library/CloudStorage/Dropbox/VImortality/manuscript/VImortality.tex" 1685014197 30152 ec4abcbec8806254af88cd7923544315 ""
+  "/Users/patan506/Library/CloudStorage/Dropbox/VImortality/manuscript/aux/VImortality.aux" 1685012134 11774 08aaaa2c0cfab220690bbe094ed74f2a ""
   "/usr/local/texlive/2021/texmf-dist/fonts/enc/dvips/cm-super/cm-super-ts1.enc" 1136849721 2900 1537cc8184ad1792082cd229ecc269f4 ""
   "/usr/local/texlive/2021/texmf-dist/fonts/map/fontname/texfonts.map" 1577235249 3524 cb3e574dea2d1052e39280babc910dc8 ""
   "/usr/local/texlive/2021/texmf-dist/fonts/tfm/jknappen/ec/tcrm0600.tfm" 1136768653 1536 12e8c510d3e158fdd0e9a42e75118bd9 ""
@@ -156,10 +156,10 @@
   "/usr/local/texlive/2021/texmf-var/fonts/map/pdftex/updmap/pdftex.map" 1616695603 5169178 a2ce6e2d73f603b690db6777d06dbccb ""
   "/usr/local/texlive/2021/texmf-var/web2c/pdftex/pdflatex.fmt" 1619614356 2724735 d86ea43b6a3269892059adf80e6f28c9 ""
   "/usr/local/texlive/2021/texmf.cnf" 1616695596 577 4c1911a7228e554c6032256d3cf5567d ""
-  "VImortality.tex" 1684679429 30077 062ba4e42a979bb936e8a272a006c0ad ""
-  "aux/VImortality.aux" 1684679358 11772 678ddb9ce915df20096fb5e115af42ca "pdflatex"
-  "aux/VImortality.bbl" 1684679357 6578 0a87e73311d77df65fad7847a3a5d829 "bibtex aux/VImortality"
-  "aux/VImortality.out" 1684679358 1044 647a4f565f69372b00a891f8433fb1d3 "pdflatex"
+  "VImortality.tex" 1685014197 30152 ec4abcbec8806254af88cd7923544315 ""
+  "aux/VImortality.aux" 1685012134 11774 08aaaa2c0cfab220690bbe094ed74f2a "pdflatex"
+  "aux/VImortality.bbl" 1685007021 6578 0a87e73311d77df65fad7847a3a5d829 "bibtex aux/VImortality"
+  "aux/VImortality.out" 1685012134 1044 647a4f565f69372b00a891f8433fb1d3 "pdflatex"
   "figs/latent_dim_comparison_R2_linear.pdf" 1683628361 16168 9a9ef376ae0bb67fc27ec467981af0e5 ""
   "figs/latent_dim_comparison_R2_radial.pdf" 1683628358 20374 4506e82b8743c48ed0649796d1f776c2 ""
   "figs/latent_dim_comparison_linear.pdf" 1683628361 15147 ae7464cf4160bcf0b2c501f80c9a1f9e ""
@@ -177,9 +177,9 @@
   "figs/sweden_radial_basis_1952_2011_Male_100_15_4rateVsAge.pdf" 1684662463 19182 e58a64deb8c00b8cb913876e42f486c0 ""
   "figs/sweden_radial_basis_1952_2011_Male_100_15_4rateVsTime.pdf" 1684662494 23418 7afa7bb5e22928e30f84f185ce97130f ""
   (generated)
-  "aux/VImortality.log"
-  "/Users/patan506/Library/CloudStorage/Dropbox/VImortality/manuscript/aux/VImortality.log"
-  "aux/VImortality.out"
-  "aux/VImortality.pdf"
   "/Users/patan506/Library/CloudStorage/Dropbox/VImortality/manuscript/aux/VImortality.pdf"
+  "aux/VImortality.pdf"
   "aux/VImortality.aux"
+  "aux/VImortality.out"
+  "/Users/patan506/Library/CloudStorage/Dropbox/VImortality/manuscript/aux/VImortality.log"
+  "aux/VImortality.log"

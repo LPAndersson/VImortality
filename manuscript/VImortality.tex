@@ -11,7 +11,6 @@
 \usepackage{subcaption}
 \usepackage{xcolor}
 
-
 \hypersetup{
            breaklinks=true,   % splits links across lines
            hidelinks,  
@@ -71,7 +70,7 @@
 \newtheorem{theorem}{Theorem}
 \newtheorem{definition}{Definition}
 
-\title{Mortality forecasting using variational inference}
+\title{Mortality Forecasting using Variational Inference}
 \author{
 Patrik Andersson\thanks{Uppsala University ({patrik.andersson@statistics.uu.se})}
 \and  
@@ -85,7 +84,7 @@ Mathias Lindholm\thanks{Stockholm University ({lindholm@math.su.se})}
 \maketitle
 
 \begin{abstract}
-This paper considers the problem of forecasting mortality rates. A large number of models have already been proposed for this task, but they generally have the disadvantage of either estimating the model in a two-step process, possibly losing efficiency, or relying on methods that are cumbersome for the practitioner to use. We instead propose using variational inference and the probabilistic programming library Pyro for estimating the model. It is then possible to estimate the full model in one step and it is also relatively easy to incorporate different modelling choices.
+This paper considers the problem of forecasting mortality rates. A large number of models have already been proposed for this task, but they generally have the disadvantage of either estimating the model in a two-step process, possibly losing efficiency, or relying on methods that are cumbersome for the practitioner to use. We instead propose using variational inference and the probabilistic programming library Pyro for estimating the model. This allows for flexibility in modelling assumptions while still being able to estimate the full model in one step.
 
 The models are fitted on Swedish mortality data and we find that the in-sample fit is good and that the forecasting performance is better than other popular models.
 
@@ -104,7 +103,7 @@ Recently it has been suggested to use models from deep learning, sometimes calle
 
 Compared to previous mortality forecasting models, the novelty of this paper is therefore to use black-box variational inference \citep{ranganath2014black} to solve the inference problem. This means that after specifying how to sample from the model and the approximate posterior, the inference is done automatically without any model-specific customisation. The family of models that can be handled is also expanded. For example, one can consider other families of functions for mapping the latent process to mortality rates. Also, in this case, all the parameters can be estimated simultaneously. This latter point is problematic when using particle filter techniques, where it is necessary to estimate the linear mapping from the latent process to the mortality rates first, before continuing with the estimation of the other parameters.
 
-\textcolor{red}{Other approaches that use machine learning techniques for forecasting mortality rates can be found in e.g.\ \cite{richman2019lee,richman2021neural,perla2021time} that consider various types of Gaussian recurrent neural network structures, \cite{nigri2019deep,marino2020measuring,lindholm2022efficient} that consider univariate LSTM neural network, both with and without a Poisson population assumption, and \cite{deprez2017machine} that consider tree-based techniques.}
+Other approaches that use machine learning techniques for forecasting mortality rates can be found in e.g.\ \cite{richman2019lee,richman2021neural,perla2021time} that consider various types of Gaussian recurrent neural network structures, \cite{nigri2019deep,marino2020measuring,lindholm2022efficient} that consider univariate LSTM neural network, both with and without a Poisson population assumption, and \cite{deprez2017machine} that consider tree-based techniques.
 
 The model is implemented using the probabilistic programming language Pyro \citep{bingham2018pyro} and the code is available at \url{https://github.com/LPAndersson/VImortality}.
 
@@ -197,8 +196,7 @@ and  the forecast of mortality rates is given by $\exp(f^{\hat \psi}(\hat X_t))$
 
 If one wants to forecast the actual number of deaths, a forecast of the number of living at the beginning of the year is also needed, together with some assumption on the distribution of when in the year people are born. For a longer discussion on how this can be done, we refer to \cite{andersson2020mortality}.
 
-
-\textcolor{red}{The forecast is validated by calculating the logarithmic score of the forecast on the validation data set. The logarithmic score is the logarithm of the predicted density evaluated at the observed value, see for example \cite{gneiting2007strictly}. That is, if $\mathcal P_{a,t}$ is the forecasted distribution of death counts from \eqref{eq:deathDist} and $d_{a,t}$ is the observation, the log-score is
+The forecast is validated by calculating the logarithmic score of the forecast on the validation data set. The logarithmic score is the logarithm of the predicted density evaluated at the observed value, see for example \cite{gneiting2007strictly}. That is, if $\mathcal P_{a,t}$ is the forecasted distribution of death counts from \eqref{eq:deathDist} and $d_{a,t}$ is the observation, the log-score is
 $$
 \text{logs}(\mathcal P_{t}, d_{t}) := \sum_a \log \mathcal P_{a,t}(d_{a,t}).
 $$
@@ -206,7 +204,7 @@ We will evaluate the models using a rolling window of training and evaluation da
 $$
 R^2 = \frac{\overline{ \text{logs}(\mathcal P, d) } - \overline{ \text{logs}(\overline{\mathcal P}, d) }}{\overline{ \text{logs}(\widehat{\mathcal P}, d) } - \overline{ \text{logs}(\overline{\mathcal P}, d) }}.
 $$
-Here, $\overline{\mathcal P}$ denotes the model with only a constant intercept and $\widehat{\mathcal P}$ the saturated model, i.e.\ the model that forecasts with mean equal to the observation.}
+Here, $\overline{\mathcal P}$ denotes the model with only a constant intercept and $\widehat{\mathcal P}$ the saturated model, i.e.\ the model that forecasts with mean equal to the observation.
 
 \section{Results}\label{sec:results}
 
@@ -387,11 +385,12 @@ The model performance is summarized in Table \ref{table:model_comparision_sweden
         \caption{Comparison of our model and the Lee-Carter and Plat models. Each model is fitted using 60 years of data and evaluated on the following 10 years. The figures show that both the affine and radial basis models perform well.}
         \label{fig:model_comparison}
 \end{figure}
-
+\newpage
 \section{Conclusions}\label{sec:conclusions}
+In this paper, we have considered a state-space model for mortality forecasting and we have shown how it is possible to fit such a model using variational inference. Using variational inference it is possible to not only use a Poisson likelihood for the observed number of deaths but also to estimate the complete model in one step. The model is also flexible in that, for example, we can consider different functions for projecting the latent variables to the mortality curve. We considered both affine functions and radial basis functions, but the practitioner has the freedom to choose other classes of functions without complication. Another advantage is that the model is implemented in Pyro, so that very little custom code is needed. Finally, we show that our model and inference method outperform other popular methods.
 
-In this paper, we have considered a state-space model for mortality forecasting and we have shown how it is possible to fit such a model using variational inference. Using variational inference it is possible to not only use a Poisson likelihood for the observed number of deaths but also to estimate the complete model in one step. The model is also quite flexible in that, for example, we can consider different functions for projecting the latent variables to the mortality curve. We considered both affine functions and radial basis functions, but the practitioner has the freedom to choose other classes of functions without much complication. Another advantage is that the model is implemented in Pyro, so that very little custom code is needed. Finally, we show that our model and inference method outperform other popular methods.
-    
+\section*{Data availability statement}
+The data used in this paper can be downloaded free of charge from \url{https://www.mortality.org}.
     
 \bibliographystyle{apalike}
 \bibliography{mortality}
