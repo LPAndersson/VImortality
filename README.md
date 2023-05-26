@@ -1,6 +1,6 @@
 # Forecasting mortality using variational inference
 
-Implementation of [''Forecasting mortality using variational inference''](https://arxiv.org/abs/21xx.xxxxx).
+Implementation of [''Forecasting mortality using variational inference''](http://arxiv.org/abs/2305.15943).
 
 ## Dependencies
 
